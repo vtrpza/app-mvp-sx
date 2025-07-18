@@ -1,0 +1,84 @@
+{
+  "name": "SX Locações - Mobilidade Urbana Sustentável",
+  "short_name": "SX Locações",
+  "description": "Aluguel de patinetes, bikes e veículos recreativos. Mobilidade urbana sustentável com tecnologia avançada.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#05a658",
+  "orientation": "portrait",
+  "scope": "/",
+  "lang": "pt-BR",
+  "categories": ["lifestyle", "travel", "transportation"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "320x568",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot2.png",
+      "sizes": "1024x768",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "Alugar Patinete",
+      "short_name": "Patinete",
+      "description": "Aluguel rápido de patinetes",
+      "url": "/rent/scooter",
+      "icons": [
+        {
+          "src": "/shortcut-scooter.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Marketplace",
+      "short_name": "Marketplace",
+      "description": "Veículos recreativos",
+      "url": "/marketplace",
+      "icons": [
+        {
+          "src": "/shortcut-marketplace.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Guia Turístico",
+      "short_name": "Guia",
+      "description": "Pontos turísticos",
+      "url": "/guide",
+      "icons": [
+        {
+          "src": "/shortcut-guide.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
