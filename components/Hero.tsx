@@ -117,8 +117,8 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                   </span>
                 </h1>
                 
-                <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-2xl leading-relaxed animate-slide-up animate-stagger-1 mx-auto lg:mx-0">
-                  Descubra a cidade de forma <strong>sustentável</strong> e <strong>inteligente</strong>. 
+                <p className="text-lg sm:text-xl md:text-2xl text-white leading-relaxed animate-slide-up animate-stagger-1 text-center lg:text-left">
+                  Descubra a cidade de forma <strong className="text-yellow-200">sustentável</strong> e <strong className="text-yellow-200">inteligente</strong>. 
                   Alugue veículos, ganhe pontos e explore pontos turísticos únicos.
                 </p>
               </div>
@@ -161,7 +161,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                             {stat.value}
                           </div>
                         </div>
-                        <div className="text-sm text-white/80 font-medium">{stat.label}</div>
+                        <div className="text-sm text-white font-medium">{stat.label}</div>
                       </div>
                     </div>
                   )
@@ -177,9 +177,9 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                     </div>
                   ))}
                 </div>
-                <div className="text-white/90">
+                <div className="text-white">
                   <div className="font-bold text-lg">2500+ usuários ativos</div>
-                  <div className="text-sm text-white/70">Já estão usando o Ponto X</div>
+                  <div className="text-sm text-white">Já estão usando o Ponto X</div>
                 </div>
               </div>
             </div>
@@ -256,7 +256,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
             <button 
               onClick={scrollToSection}
-              className="flex flex-col items-center gap-2 text-white/80 hover:text-white transition-colors"
+              className="flex flex-col items-center gap-2 text-white hover:text-yellow-200 transition-colors"
               aria-label="Rolar para baixo"
             >
               <span className="text-sm font-medium">Explorar</span>

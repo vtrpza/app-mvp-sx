@@ -187,9 +187,9 @@ export default function Features({ initialFeatureId }: FeaturesProps) {
             <span className="text-sm font-medium text-primary">Funcionalidades Premium</span>
           </div>
           <h2 id="features-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
-            Tecnologia <span className="text-gradient">Inovadora</span> ao Seu Alcance
+            <span className="text-neutral-900">Tecnologia</span> <span className="text-gradient">Inovadora</span> <span className="text-neutral-900">ao Seu Alcance</span>
           </h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-xl text-neutral-600 text-center">
             Descubra recursos exclusivos que transformam sua experiência de mobilidade urbana
           </p>
         </header>

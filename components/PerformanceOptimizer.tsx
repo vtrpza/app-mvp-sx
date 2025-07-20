@@ -9,7 +9,7 @@ export default function PerformanceOptimizer() {
       // Preload the logo
       const logoLink = document.createElement('link')
       logoLink.rel = 'preload'
-      logoLink.href = '/assets/logo-2.svg'
+      logoLink.href = '/assets/logo-2.jpg' // Use .jpg for better performance
       logoLink.as = 'image'
       logoLink.type = 'image/svg+xml'
       document.head.appendChild(logoLink)

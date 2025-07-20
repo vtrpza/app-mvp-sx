@@ -67,6 +67,13 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
     return 'text-white'
   }, [hasScrolled])
 
+  const iconClasses = useMemo(() => {
+    if (hasScrolled) {
+      return 'text-primary'
+    }
+    return 'text-white'
+  }, [hasScrolled])
+
   return (
     <header className={headerClasses} role="banner">
       <div className="container-custom">
@@ -79,7 +86,7 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
           >
             <div className="relative">
               <Image
-                src="/assets/logo-2.svg"
+                src="/assets/logo-2.jpg"
                 alt="SX Locações - Patinetes Elétricos"
                 width={120}
                 height={40}
@@ -109,16 +116,25 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
             {isLoggedIn ? (
               <div className="flex items-center space-x-4">
                 {/* Points Display */}
-                <div className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover-lift interactive-card">
+                <div className={`flex items-center gap-2 px-3 py-2 rounded-full border hover-lift interactive-card ${
+                  hasScrolled 
+                    ? 'bg-primary/10 border-primary/20' 
+                    : 'bg-white/10 backdrop-blur-sm border-white/20'
+                }`}>
                   <Star className="text-yellow-400 fill-current animate-heartbeat" size={16} />
                   <span className={`text-sm font-semibold ${textClasses}`}>
                     {user?.points || 0}
                   </span>
                   <span className={`text-xs px-2 py-1 rounded-full badge-bounce ${
-                    user?.level === 'Platinum' ? 'bg-purple-500/20 text-purple-300' :
-                    user?.level === 'Gold' ? 'bg-yellow-500/20 text-yellow-300' :
-                    user?.level === 'Silver' ? 'bg-gray-500/20 text-gray-300' :
-                    'bg-orange-500/20 text-orange-300'
+                    hasScrolled
+                      ? user?.level === 'Platinum' ? 'bg-purple-500/20 text-purple-600' :
+                        user?.level === 'Gold' ? 'bg-yellow-500/20 text-yellow-600' :
+                        user?.level === 'Silver' ? 'bg-gray-500/20 text-gray-600' :
+                        'bg-orange-500/20 text-orange-600'
+                      : user?.level === 'Platinum' ? 'bg-purple-500/20 text-purple-300' :
+                        user?.level === 'Gold' ? 'bg-yellow-500/20 text-yellow-300' :
+                        user?.level === 'Silver' ? 'bg-gray-500/20 text-gray-300' :
+                        'bg-orange-500/20 text-orange-300'
                   }`}>
                     {user?.level || 'Bronze'}
                   </span>
@@ -126,14 +142,18 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
 
                 {/* Notifications */}
                 <button 
-                  className={`p-2 rounded-lg focus-ring hover-lift animate-wiggle ${textClasses}`}
+                  className={`p-2 rounded-lg focus-ring hover-lift animate-wiggle`}
                   aria-label="Notificações"
                 >
-                  <Bell size={20} className="hover:animate-wiggle" />
+                  <Bell size={20} className={`hover:animate-wiggle ${iconClasses}`} />
                 </button>
 
                 {/* User Menu */}
-                <div className="flex items-center space-x-3 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover-lift interactive-card">
+                <div className={`flex items-center space-x-3 px-3 py-2 rounded-full border hover-lift interactive-card ${
+                  hasScrolled 
+                    ? 'bg-primary/10 border-primary/20' 
+                    : 'bg-white/10 backdrop-blur-sm border-white/20'
+                }`}>
                   <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center animate-glow">
                     <User size={16} className="text-white" />
                   </div>

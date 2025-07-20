@@ -825,6 +825,21 @@ a {
   }
 }
 
+/* Text spacing fixes */
+p, h1, h2, h3, h4, h5, h6 {
+  word-spacing: normal;
+  letter-spacing: normal;
+  text-align: inherit;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
 /* PWA specific styles */
 .install-prompt {
   position: fixed;

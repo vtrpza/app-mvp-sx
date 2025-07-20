@@ -168,7 +168,7 @@ export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProp
           <h2 id="marketplace-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
             Veículos <span className="text-gradient">Recreativos</span> para Todos
           </h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-xl text-neutral-600 text-center">
             Explore nossa seleção premium de veículos com segurança garantida e processo simplificado
           </p>
         </header>
