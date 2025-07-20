@@ -42,7 +42,7 @@ export default function AdminLogin() {
             <Shield className="text-white" size={32} />
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">SX Locações - Painel Administrativo</p>
+          <p className="text-gray-600">SX Locadora - Painel Administrativo</p>
         </div>
 
         {/* Form */}
@@ -128,7 +128,7 @@ export default function AdminLogin() {
         {/* Footer */}
         <div className="mt-6 text-center">
           <p className="text-xs text-gray-500">
-            Sistema SX Locações v1.0 - MVP
+            Sistema SX Locadora v1.0 - MVP
           </p>
         </div>
       </div>
