@@ -62,9 +62,9 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
 
   const textClasses = useMemo(() => {
     if (hasScrolled) {
-      return 'text-neutral-900'
+      return 'text-neutral-900 hover:text-primary'
     }
-    return 'text-white'
+    return 'text-white hover:text-yellow-200'
   }, [hasScrolled])
 
   const iconClasses = useMemo(() => {

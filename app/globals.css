@@ -862,6 +862,25 @@ p, h1, h2, h3, h4, h5, h6 {
   letter-spacing: normal !important;
 }
 
+/* Header navigation contrast fixes */
+.glass-header nav a {
+  color: #0f172a !important; /* neutral-900 */
+  font-weight: 600;
+}
+
+.glass-header nav a:hover {
+  color: #05a658 !important; /* primary */
+}
+
+/* Header buttons contrast when scrolled */
+.glass-header button {
+  color: #0f172a !important; /* neutral-900 */
+}
+
+.glass-header button:hover {
+  color: #05a658 !important; /* primary */
+}
+
 /* PWA specific styles */
 .install-prompt {
   position: fixed;

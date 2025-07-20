@@ -35,21 +35,21 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary to-secondary flex items-center justify-center p-4">
-      <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md">
+      <div className="bg-white rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-md mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mb-4 mx-auto">
             <Shield className="text-white" size={32} />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">SX Locadora - Painel Administrativo</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">Admin Dashboard</h1>
+          <p className="text-neutral-600">SX Locadora - Painel Administrativo</p>
         </div>
 
         {/* Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           {/* Username */}
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="username" className="block text-sm font-medium text-neutral-700 mb-1">
               Usuário
             </label>
             <input
@@ -57,7 +57,7 @@ export default function AdminLogin() {
               id="username"
               value={credentials.username}
               onChange={(e) => setCredentials(prev => ({ ...prev, username: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              className="w-full px-3 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-colors"
               placeholder="admin"
               required
             />

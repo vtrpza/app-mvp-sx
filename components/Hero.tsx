@@ -185,53 +185,53 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
             </div>
 
             {/* Visual Side */}
-            <div className="relative animate-slide-up animate-stagger-2 px-4 lg:px-0 order-first lg:order-last">
+            <div className="relative animate-slide-up animate-stagger-2 px-4 lg:px-0 order-first lg:order-last w-full max-w-sm mx-auto lg:max-w-none lg:mx-0">
               
               {/* Main Visual Container */}
               <div className="relative">
                 
                 {/* Glassmorphism Card */}
-                <div className="relative z-10 bg-white/10 backdrop-blur-lg rounded-3xl p-4 lg:p-8 border border-white/20 shadow-2xl max-w-md lg:max-w-none">
+                <div className="relative z-10 bg-white/10 backdrop-blur-lg rounded-3xl p-3 sm:p-4 lg:p-8 border border-white/20 shadow-2xl w-full">
                   
                   {/* Mock App Interface */}
-                  <div className="bg-white/95 rounded-2xl p-4 lg:p-6 shadow-xl">
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-xl flex items-center justify-center">
-                          <Zap className="text-white" size={20} />
+                  <div className="bg-white/95 rounded-2xl p-3 sm:p-4 lg:p-6 shadow-xl">
+                    <div className="flex items-center justify-between mb-4 sm:mb-6">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-primary to-secondary rounded-xl flex items-center justify-center">
+                          <Zap className="text-white" size={16} />
                         </div>
                         <div>
-                          <div className="font-bold text-neutral-800">SX Locações</div>
-                          <div className="text-sm text-neutral-600">Bem-vindo de volta!</div>
+                          <div className="font-bold text-neutral-800 text-sm sm:text-base">SX Locações</div>
+                          <div className="text-xs sm:text-sm text-neutral-600">Bem-vindo de volta!</div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full">
-                        <Star className="text-yellow-500 fill-current" size={16} />
-                        <span className="font-bold text-neutral-800">2,450</span>
+                      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-2 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full">
+                        <Star className="text-yellow-500 fill-current" size={12} />
+                        <span className="font-bold text-neutral-800 text-sm">2,450</span>
                       </div>
                     </div>
                     
                     {/* Map Mockup */}
-                    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-xl p-6 mb-6 relative overflow-hidden">
+                    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-xl p-3 sm:p-4 lg:p-6 mb-4 sm:mb-6 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20"></div>
                       <div className="relative">
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="text-sm font-medium text-neutral-700">Veículos Próximos</div>
+                        <div className="flex items-center justify-between mb-3 sm:mb-4">
+                          <div className="text-xs sm:text-sm font-medium text-neutral-700">Veículos Próximos</div>
                           <div className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">3 disponíveis</div>
                         </div>
                         <div className="space-y-2">
                           {['Patinete Elétrico', 'Bike Urbana', 'E-Scooter Pro'].map((vehicle, i) => (
-                            <div key={i} className="flex items-center justify-between p-3 bg-white/80 rounded-lg">
-                              <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
-                                  <MapPin size={14} className="text-primary" />
+                            <div key={i} className="flex items-center justify-between p-2 sm:p-3 bg-white/80 rounded-lg">
+                              <div className="flex items-center gap-2 sm:gap-3">
+                                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                                  <MapPin size={12} className="text-primary" />
                                 </div>
                                 <div>
-                                  <div className="text-sm font-medium text-neutral-800">{vehicle}</div>
+                                  <div className="text-xs sm:text-sm font-medium text-neutral-800">{vehicle}</div>
                                   <div className="text-xs text-neutral-600">2 min • 150m</div>
                                 </div>
                               </div>
-                              <div className="text-sm font-bold text-primary">R$ 5/h</div>
+                              <div className="text-xs sm:text-sm font-bold text-primary">R$ 5/h</div>
                             </div>
                           ))}
                         </div>
@@ -239,7 +239,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                     </div>
                     
                     {/* Action Button */}
-                    <button className="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] btn-ripple hover-glow animate-glow">
+                    <button className="w-full bg-gradient-to-r from-primary to-secondary text-white py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] btn-ripple hover-glow animate-glow">
                       Alugar Agora
                     </button>
                   </div>
