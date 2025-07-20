@@ -19,12 +19,12 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  title: 'SX Locações - Mobilidade Urbana Sustentável',
+  title: 'SX Locadora - Mobilidade Urbana Sustentável',
   description: 'Aluguel de patinetes, bikes e veículos recreativos. Mobilidade urbana sustentável com tecnologia avançada.',
-  keywords: 'patinetes, bikes, jet ski, lanchas, aluguel, mobilidade urbana, sustentável, SX Locações',
-  authors: [{ name: 'SX Locações' }],
-  creator: 'SX Locações',
-  publisher: 'SX Locações',
+  keywords: 'patinetes, bikes, jet ski, lanchas, aluguel, mobilidade urbana, sustentável, SX Locadora',
+  authors: [{ name: 'SX Locadora' }],
+  creator: 'SX Locadora',
+  publisher: 'SX Locadora',
   formatDetection: {
     email: false,
     address: false,
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   manifest: '/manifest.json',
   appleWebApp: {
-    title: 'SX Locações',
+    title: 'SX Locadora',
     statusBarStyle: 'default',
     capable: true,
   },
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'pt_BR',
     url: 'https://app.sxlocadora.com.br',
-    title: 'SX Locações - Mobilidade Urbana Sustentável',
+    title: 'SX Locadora - Mobilidade Urbana Sustentável',
     description: 'Aluguel de patinetes, bikes e veículos recreativos. Mobilidade urbana sustentável com tecnologia avançada.',
-    siteName: 'SX Locações',
+    siteName: 'SX Locadora',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SX Locações - Mobilidade Urbana Sustentável',
+    title: 'SX Locadora - Mobilidade Urbana Sustentável',
     description: 'Aluguel de patinetes, bikes e veículos recreativos. Mobilidade urbana sustentável com tecnologia avançada.',
   },
   robots: {
@@ -76,8 +76,8 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="SX Locações" />
-        <meta name="application-name" content="SX Locações" />
+        <meta name="apple-mobile-web-app-title" content="SX Locadora" />
+        <meta name="application-name" content="SX Locadora" />
         <meta name="msapplication-TileColor" content="#05a658" />
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="theme-color" content="#05a658" />
