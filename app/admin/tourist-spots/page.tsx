@@ -467,7 +467,7 @@ export default function TouristSpotsAdmin() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <MapPin className="text-gray-300 mx-auto mb-4" size={48} />
+            <MapPin className="text-gray-300 mb-4" size={48} />
             <p className="text-gray-500">Nenhum ponto turístico encontrado</p>
             {searchTerm && (
               <button

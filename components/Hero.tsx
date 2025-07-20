@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback, useMemo, useEffect } from 'react'
-import { ArrowRight, Play, MapPin, Clock, Shield, Star, Zap, Users, Award, ChevronDown, User, X } from 'lucide-react'
+import { ArrowRight, Play, MapPin, Clock, Star, Zap, Users, Award, ChevronDown, User, X } from 'lucide-react'
 import { useScrollAnimation, useCountUpAnimation } from '@/hooks/useScrollAnimation'
 
 interface HeroProps {
@@ -93,19 +93,19 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
         </div>
 
         <div className="container-custom relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center min-h-screen pt-20">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-screen pt-20 pb-8">
             
             {/* Content Side */}
-            <div className="text-white space-y-8 animate-slide-right" role="main">
+            <div className="text-white space-y-6 lg:space-y-8 animate-slide-right px-4 lg:px-0" role="main">
               
               {/* Main Headline */}
-              <div className="space-y-6">
+              <div className="space-y-4 lg:space-y-6 text-center lg:text-left">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 animate-fade-in">
                   <Award className="text-yellow-400" size={16} />
                   <span className="text-sm font-medium">Sistema Ponto X Disponível</span>
                 </div>
                 
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up text-balance">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up text-balance">
                   <span className="sr-only">SX Locações - </span>
                   Mobilidade Urbana
                   <br />
@@ -117,16 +117,16 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                   </span>
                 </h1>
                 
-                <p className="text-xl md:text-2xl text-white/90 max-w-lg leading-relaxed animate-slide-up animate-stagger-1 text-balance">
+                <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-lg leading-relaxed animate-slide-up animate-stagger-1 text-balance lg:mx-0">
                   Descubra a cidade de forma <strong>sustentável</strong> e <strong>inteligente</strong>. 
                   Alugue veículos, ganhe pontos e explore pontos turísticos únicos.
                 </p>
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-stagger-2">
+              <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-stagger-2 px-4 lg:px-0">
                 <button 
-                  className="btn-primary btn-ripple hover-glow group"
+                  className="btn-primary btn-ripple hover-glow group w-full sm:w-auto text-lg py-4 px-8"
                   onClick={scrollToSection}
                   aria-label="Explorar veículos disponíveis"
                 >
@@ -135,7 +135,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                 </button>
                 
                 <button 
-                  className="btn-secondary hover-lift group focus-ring"
+                  className="btn-secondary hover-lift group focus-ring w-full sm:w-auto text-lg py-4 px-8"
                   onClick={playVideo}
                   aria-label="Assistir vídeo explicativo"
                 >
@@ -145,7 +145,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
               </div>
 
               {/* Stats Grid */}
-              <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 animate-slide-up animate-stagger-3" role="region" aria-label="Estatísticas do serviço">
+              <div ref={statsRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 pt-6 lg:pt-8 animate-slide-up animate-stagger-3 px-4 lg:px-0" role="region" aria-label="Estatísticas do serviço">
                 {quickStats.map((stat, index) => {
                   const Icon = stat.icon
                   return (
@@ -169,32 +169,32 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
               </div>
 
               {/* Social Proof */}
-              <div className="flex items-center gap-4 pt-4 animate-slide-up animate-stagger-4">
+              <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 animate-slide-up animate-stagger-4 px-4 lg:px-0 text-center lg:text-left">
                 <div className="flex -space-x-2">
                   {[1,2,3,4].map((i) => (
-                    <div key={i} className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-white flex items-center justify-center">
-                      <User size={16} className="text-white" />
+                    <div key={i} className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-white flex items-center justify-center animate-glow">
+                      <User size={18} className="text-white" />
                     </div>
                   ))}
                 </div>
                 <div className="text-white/90">
-                  <div className="font-semibold">2500+ usuários ativos</div>
+                  <div className="font-bold text-lg">2500+ usuários ativos</div>
                   <div className="text-sm text-white/70">Já estão usando o Ponto X</div>
                 </div>
               </div>
             </div>
 
             {/* Visual Side */}
-            <div className="relative animate-slide-up animate-stagger-2">
+            <div className="relative animate-slide-up animate-stagger-2 px-4 lg:px-0 order-first lg:order-last">
               
               {/* Main Visual Container */}
               <div className="relative">
                 
                 {/* Glassmorphism Card */}
-                <div className="relative z-10 bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl">
+                <div className="relative z-10 bg-white/10 backdrop-blur-lg rounded-3xl p-4 lg:p-8 border border-white/20 shadow-2xl max-w-md lg:max-w-none">
                   
                   {/* Mock App Interface */}
-                  <div className="bg-white/95 rounded-2xl p-6 shadow-xl">
+                  <div className="bg-white/95 rounded-2xl p-4 lg:p-6 shadow-xl">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-xl flex items-center justify-center">
@@ -278,7 +278,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
               </button>
               <div className="aspect-video bg-white rounded-lg flex items-center justify-center">
                 <div className="text-center">
-                  <Play size={48} className="text-gray-400 mx-auto mb-4" />
+                  <Play size={48} className="text-gray-400 mb-4" />
                   <p className="text-gray-600">Vídeo explicativo em breve</p>
                 </div>
               </div>

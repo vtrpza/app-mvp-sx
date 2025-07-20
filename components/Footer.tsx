@@ -88,7 +88,7 @@ export default function Footer({ onNewsletterSubmit, onPWAInstall }: FooterProps
   return (
     <footer className="bg-gray-900 text-white" role="contentinfo">
       {/* Main Footer */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container px-4 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* ✅ Accessible brand section */}
           <div className="space-y-4 md:col-span-2 lg:col-span-1">
@@ -237,7 +237,7 @@ export default function Footer({ onNewsletterSubmit, onPWAInstall }: FooterProps
 
       {/* Bottom Bar */}
       <div className="bg-black/50 py-4">
-        <div className="container mx-auto px-4">
+        <div className="container px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
               © 2024 SX Locações. Todos os direitos reservados.

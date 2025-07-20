@@ -119,7 +119,7 @@ export default function ImageUploader({ onImageSelect, currentImage, className =
           />
           
           <div className="space-y-3">
-            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
               {dragOver ? (
                 <Upload className="text-primary" size={24} />
               ) : (

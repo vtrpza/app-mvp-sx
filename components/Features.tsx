@@ -201,14 +201,14 @@ export default function Features({ initialFeatureId }: FeaturesProps) {
           <h2 id="features-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 text-balance">
             Tecnologia <span className="text-gradient">Inovadora</span> ao Seu Alcance
           </h2>
-          <p className="text-xl text-neutral-600 max-w-2xl mx-auto text-balance">
+          <p className="text-xl text-neutral-600 max-w-2xl text-balance">
             Descubra recursos exclusivos que transformam sua experiência de mobilidade urbana
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-2 gap-16 animate-slide-up animate-stagger-1">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 animate-slide-up animate-stagger-1">
           {/* Premium Feature List */}
-          <div className="space-y-6" role="tablist" aria-label="Lista de funcionalidades">
+          <div className="space-y-4 lg:space-y-6" role="tablist" aria-label="Lista de funcionalidades">
             {featureList.map((feature, index) => {
               const Icon = feature.icon
               
@@ -264,7 +264,7 @@ export default function Features({ initialFeatureId }: FeaturesProps) {
           </div>
 
           {/* Premium Feature Details */}
-          <div className="lg:sticky lg:top-24 h-fit animate-slide-up animate-stagger-2">
+          <div className="lg:sticky lg:top-24 h-fit animate-slide-up animate-stagger-2 mt-6 lg:mt-0">
             <div 
               key={selectedFeature.id}
               className="card relative overflow-hidden animate-fade-in-fast"

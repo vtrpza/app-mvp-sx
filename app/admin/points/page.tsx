@@ -230,7 +230,7 @@ export default function PointsAdmin() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Object.entries(stats.levelDistribution).map(([level, count]) => (
             <div key={level} className="text-center p-4 rounded-lg bg-gray-50">
-              <div className={`w-12 h-12 rounded-full mx-auto mb-2 flex items-center justify-center ${
+              <div className={`w-12 h-12 rounded-full mb-2 flex items-center justify-center ${
                 level === 'Bronze' ? 'bg-orange-100' :
                 level === 'Silver' ? 'bg-gray-100' :
                 level === 'Gold' ? 'bg-yellow-100' : 'bg-purple-100'
@@ -354,7 +354,7 @@ export default function PointsAdmin() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Users className="text-gray-300 mx-auto mb-4" size={48} />
+            <Users className="text-gray-300 mb-4" size={48} />
             <p className="text-gray-500">Nenhum usuário encontrado</p>
           </div>
         )}

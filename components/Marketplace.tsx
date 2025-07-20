@@ -171,14 +171,14 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
           <h2 id="marketplace-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 text-balance">
             Veículos <span className="text-gradient">Recreativos</span> para Todos
           </h2>
-          <p className="text-xl text-neutral-600 max-w-2xl mx-auto text-balance">
+          <p className="text-xl text-neutral-600 max-w-2xl text-balance">
             Explore nossa seleção premium de veículos com segurança garantida e processo simplificado
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-4 gap-8 animate-slide-up animate-stagger-1">
+        <div className="grid lg:grid-cols-4 gap-6 lg:gap-8 animate-slide-up animate-stagger-1">
           {/* Premium Filters Sidebar */}
-          <aside className="lg:col-span-1" role="complementary" aria-label="Filtros de busca">
+          <aside className="lg:col-span-1 order-2 lg:order-1" role="complementary" aria-label="Filtros de busca">
             <div className="card sticky top-24">
               <h3 className="text-lg font-bold text-neutral-900 mb-6 flex items-center gap-2">
                 <div className="w-5 h-5 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
@@ -279,14 +279,14 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
           </aside>
 
           {/* Premium Vehicles Grid */}
-          <main className="lg:col-span-3 animate-slide-up animate-stagger-2" role="main" aria-label="Lista de veículos">
+          <main className="lg:col-span-3 order-1 lg:order-2 animate-slide-up animate-stagger-2" role="main" aria-label="Lista de veículos">
             {isPending && (
               <div className="flex items-center justify-center py-12" role="status" aria-live="polite">
                 <div className="w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin" aria-label="Carregando veículos"></div>
               </div>
             )}
             
-            <div className="grid md:grid-cols-2 gap-8" role="list">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8" role="list">
               {filteredVehicles.map((vehicle, index) => (
                 <article 
                   key={vehicle.id} 
@@ -333,7 +333,7 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
                     </header>
                     
                     {/* Location & Availability */}
-                    <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 mb-6">
                       <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl">
                         <div className="p-2 bg-primary/10 rounded-lg">
                           <MapPin size={16} className="text-primary" />
@@ -375,11 +375,11 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
 
                     {/* Premium Price Section */}
                     <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-4 mb-6 border border-primary/10">
-                      <div className="flex items-center justify-between">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                         <div>
                           <div className="text-xs text-neutral-500 font-medium uppercase tracking-wide mb-1">Preço por hora</div>
                           <div className="flex items-baseline gap-1">
-                            <span className="text-3xl font-bold text-gradient" aria-label={`Preço: ${vehicle.price} reais por hora`}>
+                            <span className="text-2xl sm:text-3xl font-bold text-gradient" aria-label={`Preço: ${vehicle.price} reais por hora`}>
                               R$ {vehicle.price}
                             </span>
                             <span className="text-neutral-600 text-sm">/h</span>
@@ -389,7 +389,7 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
                         <button
                           onClick={() => handleRent(vehicle)}
                           disabled={!vehicle.available}
-                          className={`btn-primary btn-ripple hover-glow group ${!vehicle.available && 'opacity-50 cursor-not-allowed'}`}
+                          className={`btn-primary btn-ripple hover-glow group w-full sm:w-auto text-sm sm:text-base py-3 sm:py-2 ${!vehicle.available && 'opacity-50 cursor-not-allowed'}`}
                           aria-label={`Alugar ${vehicle.name}`}
                         >
                           <span>{vehicle.available ? 'Alugar Agora' : 'Indisponível'}</span>
@@ -424,11 +424,11 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
 
             {filteredVehicles.length === 0 && !isPending && (
               <div className="text-center py-16" role="status">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mb-6">
                   <Search size={32} className="text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-neutral-900 mb-2">Nenhum veículo encontrado</h3>
-                <p className="text-neutral-600 max-w-md mx-auto leading-relaxed">
+                <p className="text-neutral-600 max-w-md leading-relaxed">
                   Ajuste seus filtros ou tente uma busca diferente para encontrar o veículo perfeito
                 </p>
               </div>

@@ -167,7 +167,7 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
-            className={`lg:hidden p-2 rounded-lg transition-all duration-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary/50 ${textClasses}`}
+            className={`lg:hidden p-3 rounded-xl hover-lift focus-ring transition-all duration-300 ${textClasses}`}
             aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
@@ -189,19 +189,19 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
         {/* Mobile Menu */}
         <div 
           id="mobile-menu"
-          className={`lg:hidden absolute top-full left-0 right-0 transition-all duration-300 overflow-hidden ${
-            isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          className={`lg:hidden absolute top-full left-0 right-0 transition-all duration-500 overflow-hidden z-50 ${
+            isMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
           }`}
         >
-          <div className="glass-card mx-4 my-4 rounded-2xl border border-white/20">
-            <nav className="p-6 space-y-4" role="navigation" aria-label="Menu móvel">
+          <div className="glass-card mx-4 my-4 rounded-3xl border border-white/20 shadow-2xl backdrop-blur-lg">
+            <nav className="p-6 space-y-3" role="navigation" aria-label="Menu móvel">
               {navigationItems.map((item, index) => (
                 <a 
                   key={item.href}
                   href={item.href} 
-                  className="block text-neutral-800 font-medium py-3 px-4 rounded-xl transition-all duration-300 hover:bg-primary/10 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="block text-neutral-800 font-semibold py-4 px-6 rounded-2xl transition-all duration-300 hover:bg-primary/10 hover:text-primary focus-ring hover-lift animate-slide-up text-lg"
                   onClick={toggleMenu}
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {item.label}
                 </a>
@@ -212,42 +212,45 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
               {isLoggedIn ? (
                 <div className="space-y-4">
                   {/* Mobile Points Display */}
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
-                        <User size={18} className="text-white" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-neutral-800">{user?.name}</p>
-                        <p className="text-sm text-neutral-600">{user?.level || 'Bronze'}</p>
+                  <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl p-6 border border-primary/20 animate-slide-up">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center animate-glow">
+                          <User size={20} className="text-white" />
+                        </div>
+                        <div>
+                          <p className="font-bold text-neutral-900 text-lg">{user?.name}</p>
+                          <p className="text-sm text-neutral-600 font-medium">{user?.level || 'Bronze'}</p>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Star className="text-yellow-500 fill-current" size={16} />
-                      <span className="font-bold text-neutral-800">{user?.points || 0}</span>
+                    <div className="flex items-center justify-center gap-3 p-3 bg-white/60 rounded-xl">
+                      <Star className="text-yellow-500 fill-current animate-heartbeat" size={20} />
+                      <span className="font-bold text-neutral-900 text-xl">{user?.points || 0}</span>
+                      <span className="text-neutral-600 font-medium">pontos</span>
                     </div>
                   </div>
                   
                   <button 
                     onClick={handleLogout}
-                    className="w-full text-left text-neutral-600 hover:text-primary transition-colors py-3 px-4 rounded-xl hover:bg-primary/10"
+                    className="w-full bg-neutral-100 text-neutral-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 py-4 px-6 rounded-2xl font-semibold text-lg hover-lift focus-ring"
                   >
-                    Sair
+                    Sair da Conta
                   </button>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <button 
                     onClick={handleLogin}
-                    className="w-full text-left text-primary font-medium py-3 px-4 rounded-xl hover:bg-primary/10 transition-colors"
+                    className="w-full text-primary font-semibold py-4 px-6 rounded-2xl hover:bg-primary/10 transition-all duration-300 text-lg hover-lift focus-ring border-2 border-primary/20"
                   >
-                    Entrar
+                    Entrar na Conta
                   </button>
                   <button 
-                    className="w-full btn-primary justify-center"
+                    className="w-full btn-primary btn-ripple hover-glow justify-center text-lg py-4"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Cadastrar
+                    Criar Conta
                   </button>
                 </div>
               )}
