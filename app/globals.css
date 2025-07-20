@@ -834,10 +834,21 @@ p, h1, h2, h3, h4, h5, h6 {
 
 .text-center {
   text-align: center !important;
+  max-width: none !important;
 }
 
 .text-left {
   text-align: left !important;
+  max-width: none !important;
+}
+
+/* Prevent excessive text stretching */
+.container-custom p,
+.container-custom h1,
+.container-custom h2,
+.container-custom h3 {
+  max-width: 100%;
+  text-align: inherit;
 }
 
 /* PWA specific styles */
