@@ -849,6 +849,17 @@ p, h1, h2, h3, h4, h5, h6 {
 .container-custom h3 {
   max-width: 100%;
   text-align: inherit;
+  white-space: normal;
+  word-wrap: normal;
+  overflow-wrap: normal;
+}
+
+/* Specific fix for Tourist Guide section */
+#guide p {
+  max-width: none !important;
+  white-space: normal !important;
+  word-spacing: normal !important;
+  letter-spacing: normal !important;
 }
 
 /* PWA specific styles */
