@@ -82,12 +82,12 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
           <Link 
             href="/" 
             className="flex items-center group" 
-            aria-label="SX Locações - Mobilidade Urbana Inteligente"
+            aria-label="SX Locadora - Mobilidade Urbana Inteligente"
           >
             <div className="relative">
               <Image
                 src="/assets/logo-2.png"
-                alt="SX Locações - Patinetes Elétricos"
+                alt="SX Locadora - Patinetes Elétricos"
                 width={120}
                 height={40}
                 className={logoClasses}

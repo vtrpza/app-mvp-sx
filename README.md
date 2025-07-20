@@ -1,4 +1,4 @@
-# SX Locações - Mobile First PWA
+# SX Locadora - Mobile First PWA
 
 Uma aplicação web progressiva (PWA) moderna para aluguel de patinetes, bikes e veículos recreativos com funcionalidades avançadas de mobilidade urbana sustentável.
 
@@ -205,4 +205,4 @@ Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalh
 
 ---
 
-**Desenvolvido com ❤️ pela equipe SX Locações**
+**Desenvolvido com ❤️ pela equipe SX Locadora**

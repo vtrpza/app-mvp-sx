@@ -96,7 +96,7 @@ export default function Footer({ onNewsletterSubmit, onPWAInstall }: FooterProps
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center font-bold text-white text-xl" aria-hidden="true">
                 SX
               </div>
-              <span className="ml-3 text-2xl font-bold">Locações</span>
+              <span className="ml-3 text-2xl font-bold">Locadora</span>
             </div>
             <p className="text-gray-400">
               Mobilidade urbana sustentável com tecnologia avançada. 
@@ -240,7 +240,7 @@ export default function Footer({ onNewsletterSubmit, onPWAInstall }: FooterProps
         <div className="container px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © 2024 SX Locações. Todos os direitos reservados.
+              © 2025 SX Locadora. Todos os direitos reservados.
             </p>
             <div className="flex items-center gap-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white text-sm transition-colors">
