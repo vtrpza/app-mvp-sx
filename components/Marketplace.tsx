@@ -14,6 +14,9 @@ import {
   Shield,
   CreditCard
 } from 'lucide-react'
+import RentalChoiceModal from './RentalChoiceModal'
+import QuickRegisterModal from './QuickRegisterModal'
+import { Vehicle } from '@/types'
 
 // ✅ Input validation utilities
 const sanitizeSearchTerm = (term: string): string => {
@@ -99,6 +102,10 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [isPending, startTransition] = useTransition()
+  const [selectedVehicle, setSelectedVehicle] = useState<typeof mockVehicles[0] | null>(null)
+  const [showChoiceModal, setShowChoiceModal] = useState(false)
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
+  const [currentUser, setCurrentUser] = useState<any>(null)
   
   // ✅ Memoized and optimized filtering
   const filteredVehicles = useMemo(() => {
@@ -132,45 +139,66 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
       return
     }
     
-    try {
-      await onRent?.(vehicle.id)
-    } catch (error) {
-      console.error('Rental failed:', error)
-    }
-  }, [onRent])
+    setSelectedVehicle(vehicle)
+    setShowChoiceModal(true)
+  }, [])
+
+  const handleRegisterChoice = useCallback(() => {
+    setShowChoiceModal(false)
+    setShowRegisterModal(true)
+  }, [])
+
+  const handleWhatsAppChoice = useCallback(() => {
+    // Analytics tracking could go here
+    console.log('User chose WhatsApp direct contact')
+  }, [])
+
+  const handleRegistrationSuccess = useCallback((user: any) => {
+    setCurrentUser(user)
+    setShowRegisterModal(false)
+    // Show success message or redirect
+    alert(`Parabéns ${user.name}! Você ganhou 100 pontos de boas-vindas!`)
+  }, [])
 
   return (
-    <section id="marketplace" className="py-16 px-4 sm:px-6 lg:px-8" role="region" aria-labelledby="marketplace-heading">
-      <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-16">
-          <h2 id="marketplace-heading" className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            <span className="text-gradient">Marketplace</span> Integrado
+    <section id="marketplace" className="section-padding bg-white" role="region" aria-labelledby="marketplace-heading">
+      <div className="container-custom">
+        <header className="text-center mb-16 animate-slide-up">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full border border-primary/20 mb-6">
+            <CreditCard className="text-primary" size={16} />
+            <span className="text-sm font-medium text-primary">Marketplace Premium</span>
+          </div>
+          <h2 id="marketplace-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 text-balance">
+            Veículos <span className="text-gradient">Recreativos</span> para Todos
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Alugue diversos tipos de veículos recreativos com segurança e praticidade
+          <p className="text-xl text-neutral-600 max-w-2xl mx-auto text-balance">
+            Explore nossa seleção premium de veículos com segurança garantida e processo simplificado
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-4 gap-8 animate-on-scroll">
-          {/* ✅ Accessible filters sidebar */}
+        <div className="grid lg:grid-cols-4 gap-8 animate-slide-up animate-stagger-1">
+          {/* Premium Filters Sidebar */}
           <aside className="lg:col-span-1" role="complementary" aria-label="Filtros de busca">
-            <div className="bg-white rounded-xl p-6 shadow-lg sticky top-24">
-              <h3 className="font-semibold text-gray-900 mb-4">Filtros</h3>
+            <div className="card sticky top-24">
+              <h3 className="text-lg font-bold text-neutral-900 mb-6 flex items-center gap-2">
+                <div className="w-5 h-5 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                Filtros
+              </h3>
               
-              {/* ✅ Accessible search */}
-              <div className="mb-6">
+              {/* Premium Search */}
+              <div className="mb-8">
                 <label htmlFor="vehicle-search" className="sr-only">
                   Buscar veículos
                 </label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} aria-hidden="true" />
+                <div className="relative group">
+                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-neutral-400 group-focus-within:text-primary transition-colors" size={20} aria-hidden="true" />
                   <input
                     id="vehicle-search"
                     type="text"
                     placeholder="Buscar veículos..."
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                    className="w-full pl-12 pr-4 py-4 border border-neutral-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all bg-neutral-50 focus:bg-white"
                     aria-describedby="search-help"
                   />
                   <div id="search-help" className="sr-only">
@@ -179,154 +207,213 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
                 </div>
               </div>
 
-              {/* ✅ Accessible categories */}
-              <fieldset className="space-y-2">
+              {/* Premium Categories */}
+              <fieldset className="space-y-3 mb-8">
                 <legend className="sr-only">Categorias de veículos</legend>
                 
                 <button
                   onClick={() => setSelectedCategory('all')}
-                  className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                  className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 group ${
                     selectedCategory === 'all' 
-                      ? 'bg-primary text-white' 
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-primary to-primary-600 text-white shadow-lg scale-[1.02]' 
+                      : 'text-neutral-700 hover:bg-primary/5 hover:scale-[1.02]'
                   }`}
                   aria-pressed={selectedCategory === 'all'}
                 >
-                  <Filter size={20} aria-hidden="true" />
-                  Todos
+                  <div className={`p-2 rounded-xl transition-all ${
+                    selectedCategory === 'all' 
+                      ? 'bg-white/20' 
+                      : 'bg-primary/10 group-hover:bg-primary/20'
+                  }`}>
+                    <Filter size={20} aria-hidden="true" />
+                  </div>
+                  <span className="font-medium">Todos</span>
+                  {selectedCategory === 'all' && (
+                    <div className="ml-auto w-2 h-2 bg-white rounded-full"></div>
+                  )}
                 </button>
                 
-                {categories.map(category => {
+                {categories.map((category, index) => {
                   const Icon = category.icon
                   return (
                     <button
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id)}
-                      className={`w-full flex items-center gap-3 p-3 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 ${
+                      className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 group ${
                         selectedCategory === category.id 
-                          ? 'bg-primary text-white' 
-                          : 'text-gray-700 hover:bg-gray-100'
+                          ? 'bg-gradient-to-r from-primary to-primary-600 text-white shadow-lg scale-[1.02]' 
+                          : 'text-neutral-700 hover:bg-primary/5 hover:scale-[1.02]'
                       }`}
                       aria-pressed={selectedCategory === category.id}
+                      style={{ animationDelay: `${index * 100}ms` }}
                     >
-                      <Icon size={20} aria-hidden="true" />
-                      {category.name}
+                      <div className={`p-2 rounded-xl transition-all ${
+                        selectedCategory === category.id 
+                          ? 'bg-white/20' 
+                          : 'bg-primary/10 group-hover:bg-primary/20'
+                      }`}>
+                        <Icon size={20} aria-hidden="true" />
+                      </div>
+                      <span className="font-medium">{category.name}</span>
+                      {selectedCategory === category.id && (
+                        <div className="ml-auto w-2 h-2 bg-white rounded-full"></div>
+                      )}
                     </button>
                   )
                 })}
               </fieldset>
 
-              {/* Quick Info */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className="text-primary" size={16} />
-                  <span className="text-sm font-medium">Segurança Garantida</span>
+              {/* Premium Info Card */}
+              <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-2xl p-6 border border-primary/10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 bg-primary/10 rounded-xl">
+                    <Shield className="text-primary" size={18} />
+                  </div>
+                  <span className="font-bold text-neutral-900">Segurança Premium</span>
                 </div>
-                <p className="text-xs text-gray-600">
-                  Todos os veículos são verificados e possuem seguro obrigatório
+                <p className="text-sm text-neutral-600 leading-relaxed">
+                  Veículos verificados, seguro obrigatório e suporte 24h garantido
                 </p>
               </div>
             </div>
           </aside>
 
-          {/* ✅ Accessible vehicles grid */}
-          <main className="lg:col-span-3" role="main" aria-label="Lista de veículos">
+          {/* Premium Vehicles Grid */}
+          <main className="lg:col-span-3 animate-slide-up animate-stagger-2" role="main" aria-label="Lista de veículos">
             {isPending && (
-              <div className="flex items-center justify-center py-8" role="status" aria-live="polite">
-                <div className="spinner" aria-label="Carregando veículos"></div>
+              <div className="flex items-center justify-center py-12" role="status" aria-live="polite">
+                <div className="w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin" aria-label="Carregando veículos"></div>
               </div>
             )}
             
-            <div className="grid md:grid-cols-2 gap-6" role="list">
-              {filteredVehicles.map(vehicle => (
+            <div className="grid md:grid-cols-2 gap-8" role="list">
+              {filteredVehicles.map((vehicle, index) => (
                 <article 
                   key={vehicle.id} 
-                  className="card"
+                  className="card-vehicle group"
                   role="listitem"
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  {/* Vehicle Image */}
-                  <div className="h-48 bg-gray-200 relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                      <div className="text-4xl" aria-hidden="true">
+                  {/* Premium Vehicle Image */}
+                  <div className="h-56 bg-gradient-to-br from-neutral-100 to-neutral-200 relative overflow-hidden rounded-t-xl">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
+                      <div className="text-6xl group-hover:scale-110 transition-transform duration-300" aria-hidden="true">
                         {vehicle.category === 'bikes' ? '🚴' : 
                          vehicle.category === 'jetski' ? '🏄' : 
                          vehicle.category === 'boats' ? '⛵' : '🚗'}
                       </div>
                     </div>
                     
-                    {/* Status Badge */}
-                    <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium ${
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    {/* Premium Status Badge */}
+                    <div className={`absolute top-4 right-4 px-3 py-2 rounded-full text-xs font-bold backdrop-blur-sm border ${
                       vehicle.available 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-red-100 text-red-700'
+                        ? 'bg-green-100/90 text-green-700 border-green-200' 
+                        : 'bg-red-100/90 text-red-700 border-red-200'
                     }`}>
-                      {vehicle.available ? 'Disponível' : 'Indisponível'}
+                      {vehicle.available ? '✓ Disponível' : '⏸ Indisponível'}
+                    </div>
+
+                    {/* Rating Badge */}
+                    <div className="absolute top-4 left-4 flex items-center gap-1 px-3 py-2 bg-white/90 backdrop-blur-sm rounded-full border border-white/20">
+                      <Star className="text-yellow-400 fill-current" size={14} />
+                      <span className="text-xs font-bold text-neutral-800">{vehicle.rating}</span>
                     </div>
                   </div>
 
-                  {/* Vehicle Info */}
+                  {/* Premium Vehicle Info */}
                   <div className="p-6">
-                    <header className="flex items-start justify-between mb-2">
-                      <h3 className="font-semibold text-gray-900">{vehicle.name}</h3>
-                      <div className="flex items-center gap-1">
-                        <Star className="text-yellow-400 fill-current" size={16} aria-hidden="true" />
-                        <span className="text-sm text-gray-600" aria-label={`Avaliação: ${vehicle.rating} de 5 estrelas`}>
-                          {vehicle.rating}
-                        </span>
-                      </div>
+                    <header className="mb-4">
+                      <h3 className="text-xl font-bold text-neutral-900 mb-2 group-hover:text-primary transition-colors">
+                        {vehicle.name}
+                      </h3>
+                      <p className="text-neutral-600 leading-relaxed">{vehicle.description}</p>
                     </header>
                     
-                    <p className="text-gray-600 text-sm mb-4">{vehicle.description}</p>
-                    
-                    <div className="space-y-2 mb-4">
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <MapPin size={16} />
-                        {vehicle.location}
+                    {/* Location & Availability */}
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl">
+                        <div className="p-2 bg-primary/10 rounded-lg">
+                          <MapPin size={16} className="text-primary" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-neutral-500 font-medium uppercase tracking-wide">Local</div>
+                          <div className="text-sm font-semibold text-neutral-800">{vehicle.location}</div>
+                        </div>
                       </div>
                       
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Clock size={16} />
-                        Disponível 24h
+                      <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl">
+                        <div className="p-2 bg-secondary/10 rounded-lg">
+                          <Clock size={16} className="text-secondary" />
+                        </div>
+                        <div>
+                          <div className="text-xs text-neutral-500 font-medium uppercase tracking-wide">Horário</div>
+                          <div className="text-sm font-semibold text-neutral-800">24h</div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Features */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {vehicle.features.map(feature => (
-                        <span 
-                          key={feature}
-                          className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
+                    {/* Premium Features */}
+                    <div className="mb-6">
+                      <h4 className="text-sm font-bold text-neutral-900 mb-3 flex items-center gap-2">
+                        <div className="w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                        Recursos Inclusos
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {vehicle.features.map(feature => (
+                          <span 
+                            key={feature}
+                            className="px-3 py-2 bg-primary/5 text-primary text-xs font-medium rounded-xl border border-primary/10 hover:bg-primary/10 transition-colors"
+                          >
+                            {feature}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Premium Price Section */}
+                    <div className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-4 mb-6 border border-primary/10">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="text-xs text-neutral-500 font-medium uppercase tracking-wide mb-1">Preço por hora</div>
+                          <div className="flex items-baseline gap-1">
+                            <span className="text-3xl font-bold text-gradient" aria-label={`Preço: ${vehicle.price} reais por hora`}>
+                              R$ {vehicle.price}
+                            </span>
+                            <span className="text-neutral-600 text-sm">/h</span>
+                          </div>
+                        </div>
+                        
+                        <button
+                          onClick={() => handleRent(vehicle)}
+                          disabled={!vehicle.available}
+                          className={`btn-primary group ${!vehicle.available && 'opacity-50 cursor-not-allowed'}`}
+                          aria-label={`Alugar ${vehicle.name}`}
                         >
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Price and Action */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-2xl font-bold text-primary" aria-label={`Preço: ${vehicle.price} reais por hora`}>
-                          R$ {vehicle.price}
-                        </span>
-                        <span className="text-gray-600 text-sm">/hora</span>
+                          <span>{vehicle.available ? 'Alugar Agora' : 'Indisponível'}</span>
+                          {vehicle.available && (
+                            <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                              <CreditCard size={12} className="text-white" />
+                            </div>
+                          )}
+                        </button>
                       </div>
-                      
-                      <button
-                        onClick={() => handleRent(vehicle)}
-                        disabled={!vehicle.available}
-                        className={`btn-primary ${!vehicle.available && 'opacity-50 cursor-not-allowed'}`}
-                        aria-label={`Alugar ${vehicle.name}`}
-                      >
-                        {vehicle.available ? 'Alugar' : 'Indisponível'}
-                      </button>
                     </div>
 
-                    {/* Requirements */}
-                    <div className="mt-4 p-3 bg-yellow-50 rounded-lg">
-                      <h4 className="text-sm font-medium text-yellow-800 mb-1">Requisitos:</h4>
-                      <ul className="text-xs text-yellow-700 space-y-1">
+                    {/* Premium Requirements */}
+                    <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-2xl p-4 border border-yellow-200">
+                      <h4 className="text-sm font-bold text-yellow-800 mb-3 flex items-center gap-2">
+                        <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                        Requisitos Necessários
+                      </h4>
+                      <ul className="space-y-2">
                         {vehicle.requirements.map(req => (
-                          <li key={req}>• {req}</li>
+                          <li key={req} className="flex items-start gap-2 text-sm text-yellow-700">
+                            <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
+                            <span>{req}</span>
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -336,15 +423,33 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
             </div>
 
             {filteredVehicles.length === 0 && !isPending && (
-              <div className="text-center py-12" role="status">
-                <div className="text-gray-400 mb-4">
-                  <Search size={48} className="mx-auto" aria-hidden="true" />
+              <div className="text-center py-16" role="status">
+                <div className="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Search size={32} className="text-primary" aria-hidden="true" />
                 </div>
-                <p className="text-gray-600">Nenhum veículo encontrado para sua busca.</p>
+                <h3 className="text-xl font-bold text-neutral-900 mb-2">Nenhum veículo encontrado</h3>
+                <p className="text-neutral-600 max-w-md mx-auto leading-relaxed">
+                  Ajuste seus filtros ou tente uma busca diferente para encontrar o veículo perfeito
+                </p>
               </div>
             )}
           </main>
         </div>
+
+        {/* Modals */}
+        <RentalChoiceModal
+          isOpen={showChoiceModal}
+          onClose={() => setShowChoiceModal(false)}
+          vehicle={selectedVehicle as Vehicle}
+          onRegisterChoice={handleRegisterChoice}
+          onWhatsAppChoice={handleWhatsAppChoice}
+        />
+
+        <QuickRegisterModal
+          isOpen={showRegisterModal}
+          onClose={() => setShowRegisterModal(false)}
+          onSuccess={handleRegistrationSuccess}
+        />
       </div>
     </section>
   )

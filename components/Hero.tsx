@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useCallback, useMemo } from 'react'
-import { Play, MapPin, Clock, Shield, Star } from 'lucide-react'
+import { useState, useCallback, useMemo, useEffect } from 'react'
+import { ArrowRight, Play, MapPin, Clock, Shield, Star, Zap, Users, Award, ChevronDown, User, X } from 'lucide-react'
+import { useScrollAnimation, useCountUpAnimation } from '@/hooks/useScrollAnimation'
 
 interface HeroProps {
   stats?: {
@@ -9,196 +10,276 @@ interface HeroProps {
     availability: string
     rating: number
     cities: number
+    users: number
   }
 }
 
 const defaultStats = {
   scooters: 500,
   availability: '24h',
-  rating: 5,
-  cities: 15
+  rating: 4.9,
+  cities: 15,
+  users: 2500
 }
 
 export default function Hero({ stats = defaultStats }: HeroProps) {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [currentWord, setCurrentWord] = useState(0)
   
-  // ✅ Memoized callback for performance
+  const words = ['Inteligente', 'Sustentável', 'Conectada', 'Inovadora']
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWord((prev) => (prev + 1) % words.length)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
+  
   const playVideo = useCallback(() => setIsVideoPlaying(true), [])
   
-  // ✅ Memoized stats for performance
   const quickStats = useMemo(() => [
-    { value: `${stats.scooters}+`, label: 'Patinetes' },
-    { value: stats.availability, label: 'Disponível' },
-    { value: `${stats.rating}★`, label: 'Avaliação' },
-    { value: stats.cities, label: 'Cidades' }
+    { 
+      value: `${stats.scooters}+`, 
+      label: 'Veículos',
+      icon: MapPin,
+      color: 'text-blue-400'
+    },
+    { 
+      value: stats.availability, 
+      label: 'Disponível',
+      icon: Clock,
+      color: 'text-green-400'
+    },
+    { 
+      value: `${stats.rating}★`, 
+      label: 'Avaliação',
+      icon: Star,
+      color: 'text-yellow-400'
+    },
+    { 
+      value: `${stats.users}+`, 
+      label: 'Usuários',
+      icon: Users,
+      color: 'text-purple-400'
+    }
   ], [stats])
+
+  const scrollToSection = useCallback(() => {
+    document.getElementById('marketplace')?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
   return (
     <main>
       <section 
         id="home" 
-        className="relative min-h-screen pt-16 gradient-bg overflow-hidden"
+        className="relative min-h-screen gradient-bg-hero overflow-hidden"
         role="banner"
         aria-label="Apresentação principal - SX Locações"
       >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10" aria-hidden="true">
-          <div className="absolute inset-0 bg-[url('/pattern.svg')] bg-repeat opacity-20"></div>
+        {/* Animated Background Pattern */}
+        <div className="absolute inset-0 bg-pattern opacity-20" aria-hidden="true"></div>
+        
+        {/* Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full animate-float"></div>
+          <div className="absolute top-40 right-20 w-16 h-16 bg-secondary/20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute bottom-40 left-20 w-12 h-12 bg-primary/30 rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
+          <div className="absolute bottom-20 right-40 w-24 h-24 bg-white/5 rounded-full animate-float" style={{ animationDelay: '1s' }}></div>
         </div>
 
-        <div className="container mx-auto px-4 py-16">
-          <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
-            {/* Content */}
-            <div className="text-white space-y-8 animate-fade-in" role="main">
-              <header className="space-y-6">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+        <div className="container-custom relative z-10">
+          <div className="grid lg:grid-cols-2 gap-16 items-center min-h-screen pt-20">
+            
+            {/* Content Side */}
+            <div className="text-white space-y-8 animate-slide-right" role="main">
+              
+              {/* Main Headline */}
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 animate-fade-in">
+                  <Award className="text-yellow-400" size={16} />
+                  <span className="text-sm font-medium">Sistema Ponto X Disponível</span>
+                </div>
+                
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up text-balance">
                   <span className="sr-only">SX Locações - </span>
-                  Mobilidade
+                  Mobilidade Urbana
                   <br />
-                  <span className="text-yellow-300">Urbana</span>
-                  <br />
-                  Sustentável
+                  <span 
+                    className="text-yellow-300 transition-all duration-500 inline-block"
+                    key={currentWord}
+                  >
+                    {words[currentWord]}
+                  </span>
                 </h1>
                 
-                <p className="text-lg md:text-xl text-white/90 max-w-lg">
-                  Alugue patinetes, bikes e veículos recreativos de forma rápida e segura. 
-                  Explore a cidade com liberdade e sustentabilidade.
+                <p className="text-xl md:text-2xl text-white/90 max-w-lg leading-relaxed animate-slide-up animate-stagger-1 text-balance">
+                  Descubra a cidade de forma <strong>sustentável</strong> e <strong>inteligente</strong>. 
+                  Alugue veículos, ganhe pontos e explore pontos turísticos únicos.
                 </p>
-              </header>
-
-              {/* ✅ Accessible statistics */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4" role="region" aria-label="Estatísticas do serviço">
-                {quickStats.map((stat, index) => (
-                  <div key={index} className="text-center">
-                    <div className="text-2xl font-bold" aria-label={`${stat.value} ${stat.label}`}>
-                      {stat.value}
-                    </div>
-                    <div className="text-sm text-white/80">{stat.label}</div>
-                  </div>
-                ))}
               </div>
 
-              {/* ✅ Accessible action buttons */}
-              <div className="flex flex-col sm:flex-row gap-4" role="group" aria-label="Ações principais">
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 animate-slide-up animate-stagger-2">
                 <button 
-                  className="btn-primary"
-                  aria-label="Iniciar processo de aluguel"
+                  className="btn-primary btn-ripple hover-glow group"
+                  onClick={scrollToSection}
+                  aria-label="Explorar veículos disponíveis"
                 >
-                  Alugar Agora
+                  Explorar Veículos
+                  <ArrowRight size={20} className="group-hover:translate-x-1 group-hover:animate-heartbeat transition-all duration-300" />
                 </button>
+                
                 <button 
+                  className="btn-secondary hover-lift group focus-ring"
                   onClick={playVideo}
-                  className="btn-outline"
-                  aria-label="Assistir vídeo explicativo sobre como funciona"
+                  aria-label="Assistir vídeo explicativo"
                 >
-                  <Play size={20} aria-hidden="true" />
+                  <Play size={20} className="group-hover:scale-110 group-hover:animate-pulse transition-all duration-300" />
                   Como Funciona
                 </button>
               </div>
 
-            {/* Trust Indicators */}
-            <div className="flex items-center gap-6 pt-4">
-              <div className="flex items-center gap-2">
-                <Shield className="text-yellow-300" size={20} />
-                <span className="text-sm">Seguro e Confiável</span>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 animate-slide-up animate-stagger-3" role="region" aria-label="Estatísticas do serviço">
+                {quickStats.map((stat, index) => {
+                  const Icon = stat.icon
+                  return (
+                    <div 
+                      key={index} 
+                      className="group cursor-pointer interactive-card hover-tilt"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20 transition-all duration-300 group-hover:bg-white/20 group-hover:scale-105 hover-glow">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Icon className={`${stat.color} transition-all duration-300 group-hover:animate-wiggle`} size={20} />
+                          <div className="text-2xl font-bold group-hover:animate-rubber-band" aria-label={`${stat.value} ${stat.label}`}>
+                            {stat.value}
+                          </div>
+                        </div>
+                        <div className="text-sm text-white/80 font-medium">{stat.label}</div>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
-              <div className="flex items-center gap-2">
-                <Clock className="text-yellow-300" size={20} />
-                <span className="text-sm">Disponível 24h</span>
+
+              {/* Social Proof */}
+              <div className="flex items-center gap-4 pt-4 animate-slide-up animate-stagger-4">
+                <div className="flex -space-x-2">
+                  {[1,2,3,4].map((i) => (
+                    <div key={i} className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full border-2 border-white flex items-center justify-center">
+                      <User size={16} className="text-white" />
+                    </div>
+                  ))}
+                </div>
+                <div className="text-white/90">
+                  <div className="font-semibold">2500+ usuários ativos</div>
+                  <div className="text-sm text-white/70">Já estão usando o Ponto X</div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Star className="text-yellow-300" size={20} />
-                <span className="text-sm">Avaliado 5★</span>
+            </div>
+
+            {/* Visual Side */}
+            <div className="relative animate-slide-up animate-stagger-2">
+              
+              {/* Main Visual Container */}
+              <div className="relative">
+                
+                {/* Glassmorphism Card */}
+                <div className="relative z-10 bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 shadow-2xl">
+                  
+                  {/* Mock App Interface */}
+                  <div className="bg-white/95 rounded-2xl p-6 shadow-xl">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-xl flex items-center justify-center">
+                          <Zap className="text-white" size={20} />
+                        </div>
+                        <div>
+                          <div className="font-bold text-neutral-800">SX Locações</div>
+                          <div className="text-sm text-neutral-600">Bem-vindo de volta!</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-full">
+                        <Star className="text-yellow-500 fill-current" size={16} />
+                        <span className="font-bold text-neutral-800">2,450</span>
+                      </div>
+                    </div>
+                    
+                    {/* Map Mockup */}
+                    <div className="bg-gradient-to-br from-blue-50 to-green-50 rounded-xl p-6 mb-6 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20"></div>
+                      <div className="relative">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="text-sm font-medium text-neutral-700">Veículos Próximos</div>
+                          <div className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">3 disponíveis</div>
+                        </div>
+                        <div className="space-y-2">
+                          {['Patinete Elétrico', 'Bike Urbana', 'E-Scooter Pro'].map((vehicle, i) => (
+                            <div key={i} className="flex items-center justify-between p-3 bg-white/80 rounded-lg">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center">
+                                  <MapPin size={14} className="text-primary" />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-neutral-800">{vehicle}</div>
+                                  <div className="text-xs text-neutral-600">2 min • 150m</div>
+                                </div>
+                              </div>
+                              <div className="text-sm font-bold text-primary">R$ 5/h</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Action Button */}
+                    <button className="w-full bg-gradient-to-r from-primary to-secondary text-white py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] btn-ripple hover-glow animate-glow">
+                      Alugar Agora
+                    </button>
+                  </div>
+                </div>
+
+                {/* Floating Elements */}
+                <div className="absolute -top-6 -right-6 w-20 h-20 bg-yellow-400/20 rounded-full animate-pulse-soft"></div>
+                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-green-400/20 rounded-full animate-pulse-soft" style={{ animationDelay: '1s' }}></div>
               </div>
             </div>
           </div>
 
-          {/* ✅ Accessible visual content */}
-          <div className="relative animate-slide-up" role="complementary" aria-label="Demonstração visual do aplicativo">
-            {!isVideoPlaying ? (
-              <div className="relative">
-                {/* Mock App Screenshot */}
-                <div className="relative mx-auto border-gray-800 bg-gray-800 border-[14px] rounded-[2.5rem] h-[600px] w-[300px] shadow-xl">
-                    <div className="w-[148px] h-[18px] bg-gray-800 top-0 rounded-b-[1rem] left-1/2 -translate-x-1/2 absolute"></div>
-                    <div className="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[124px] rounded-l-lg"></div>
-                    <div className="h-[46px] w-[3px] bg-gray-800 absolute -left-[17px] top-[178px] rounded-l-lg"></div>
-                    <div className="h-[64px] w-[3px] bg-gray-800 absolute -right-[17px] top-[142px] rounded-r-lg"></div>
-                    <div className="rounded-[2rem] overflow-hidden w-full h-full bg-white">
-                        <div className="p-6 pt-8 h-full">
-                            {/* Mock App Interface */}
-                            <div className="space-y-6">
-                                <header className="text-center">
-                                    <h2 className="text-lg font-semibold text-gray-800">Encontre Patinetes</h2>
-                                    <p className="text-sm text-gray-600">Próximos a você</p>
-                                </header>
-                                
-                                {/* Mock Map */}
-                                <div className="bg-gray-100 rounded-xl h-48 flex items-center justify-center" role="img" aria-label="Mapa mostrando localização de patinetes">
-                                    <MapPin className="text-primary" size={48} aria-hidden="true" />
-                                </div>
-                                
-                                {/* Mock Scooter List */}
-                                <div className="space-y-3" role="list" aria-label="Lista de patinetes disponíveis">
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg" role="listitem">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 bg-primary rounded-full" aria-hidden="true"></div>
-                                            <div>
-                                                <div className="text-sm font-medium">SX-001</div>
-                                                <div className="text-xs text-gray-600">50m de distância</div>
-                                            </div>
-                                        </div>
-                                        <button className="text-primary text-sm font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm px-2 py-1">
-                                            Reservar
-                                        </button>
-                                    </div>
-                                    
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg" role="listitem">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-8 h-8 bg-primary rounded-full" aria-hidden="true"></div>
-                                            <div>
-                                                <div className="text-sm font-medium">SX-002</div>
-                                                <div className="text-xs text-gray-600">120m de distância</div>
-                                            </div>
-                                        </div>
-                                        <button className="text-primary text-sm font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm px-2 py-1">
-                                            Reservar
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Floating Elements */}
-                <div className="absolute -top-4 -right-4 w-16 h-16 bg-yellow-300 rounded-full flex items-center justify-center shadow-lg animate-bounce-slow">
-                  <span className="text-2xl">⚡</span>
-                </div>
-                <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                  <span className="text-xl">🚀</span>
-                </div>
-              </div>
-            ) : (
-              <div className="relative mx-auto w-80 h-[600px] bg-black rounded-3xl shadow-2xl overflow-hidden">
-                {/* Mock Video Player */}
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center text-white">
-                    <Play size={48} className="mx-auto mb-4" />
-                    <p>Vídeo: Como usar a SX Locações</p>
-                  </div>
-                </div>
-              </div>
-            )}
+          {/* Scroll Indicator */}
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
+            <button 
+              onClick={scrollToSection}
+              className="flex flex-col items-center gap-2 text-white/80 hover:text-white transition-colors"
+              aria-label="Rolar para baixo"
+            >
+              <span className="text-sm font-medium">Explorar</span>
+              <ChevronDown size={24} />
+            </button>
           </div>
         </div>
-      </div>
 
-        {/* ✅ Accessible scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce" role="button" aria-label="Rolar para baixo para ver mais conteúdo">
-          <div className="w-6 h-10 border-2 border-white rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white rounded-full mt-2"></div>
+        {/* Video Modal */}
+        {isVideoPlaying && (
+          <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4">
+            <div className="relative max-w-4xl w-full">
+              <button
+                onClick={() => setIsVideoPlaying(false)}
+                className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+                aria-label="Fechar vídeo"
+              >
+                <X size={32} />
+              </button>
+              <div className="aspect-video bg-white rounded-lg flex items-center justify-center">
+                <div className="text-center">
+                  <Play size={48} className="text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-600">Vídeo explicativo em breve</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </section>
     </main>
   )

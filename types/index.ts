@@ -13,14 +13,14 @@ export interface User {
 
 // Vehicle types
 export interface Vehicle {
-  id: string
+  id: string | number
   type: 'scooter' | 'bike' | 'jetski' | 'boat' | 'other'
-  model: string
+  model?: string
   name: string
   description: string
   price: number
   location: string
-  coordinates: {
+  coordinates?: {
     latitude: number
     longitude: number
   }
@@ -28,7 +28,7 @@ export interface Vehicle {
   available: boolean
   features: string[]
   requirements: string[]
-  image: string
+  image?: string
   rating: number
   category: string
 }

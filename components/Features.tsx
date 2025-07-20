@@ -191,21 +191,25 @@ export default function Features({ initialFeatureId }: FeaturesProps) {
   )
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50" role="region" aria-labelledby="features-heading">
-      <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-16">
-          <h2 id="features-heading" className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Funcionalidades <span className="text-gradient">Inovadoras</span>
+    <section className="section-padding gradient-bg-light" role="region" aria-labelledby="features-heading">
+      <div className="container-custom">
+        <header className="text-center mb-16 animate-slide-up">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 backdrop-blur-sm rounded-full border border-primary/20 mb-6">
+            <Star className="text-primary" size={16} />
+            <span className="text-sm font-medium text-primary">Funcionalidades Premium</span>
+          </div>
+          <h2 id="features-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 text-balance">
+            Tecnologia <span className="text-gradient">Inovadora</span> ao Seu Alcance
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Tecnologia avançada para uma experiência de mobilidade única e sustentável
+          <p className="text-xl text-neutral-600 max-w-2xl mx-auto text-balance">
+            Descubra recursos exclusivos que transformam sua experiência de mobilidade urbana
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-2 gap-12 animate-on-scroll">
-          {/* ✅ Accessible feature list */}
-          <div className="space-y-4" role="tablist" aria-label="Lista de funcionalidades">
-            {featureList.map((feature) => {
+        <div className="grid lg:grid-cols-2 gap-16 animate-slide-up animate-stagger-1">
+          {/* Premium Feature List */}
+          <div className="space-y-6" role="tablist" aria-label="Lista de funcionalidades">
+            {featureList.map((feature, index) => {
               const Icon = feature.icon
               
               return (
@@ -218,25 +222,40 @@ export default function Features({ initialFeatureId }: FeaturesProps) {
                       handleFeatureSelect(feature.id)
                     }
                   }}
-                  className={`w-full p-6 rounded-xl transition-all duration-300 text-left focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transform ${
+                  className={`card-feature w-full text-left focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 group ${
                     feature.isSelected 
-                      ? 'bg-white border-2 border-primary shadow-xl scale-[1.02]' 
-                      : 'bg-white border border-gray-200 hover:border-primary/50 hover:shadow-lg hover:scale-[1.02]'
+                      ? 'border-primary/50 shadow-xl scale-[1.02] bg-gradient-to-br from-white to-primary/5' 
+                      : 'hover:border-primary/30'
                   }`}
                   role="tab"
                   aria-selected={feature.isSelected}
                   aria-controls={`feature-panel-${feature.id}`}
                   id={`feature-tab-${feature.id}`}
+                  style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex items-start gap-4">
-                    <div className={`p-3 rounded-lg ${
-                      feature.isSelected ? 'bg-primary text-white' : 'bg-primary-50 text-primary-700'
+                  <div className="flex items-start gap-6">
+                    <div className={`relative p-4 rounded-2xl transition-all duration-300 ${
+                      feature.isSelected 
+                        ? 'bg-gradient-to-br from-primary to-primary-600 text-white shadow-lg scale-110' 
+                        : 'bg-primary/10 text-primary group-hover:bg-primary/20 group-hover:scale-105'
                     }`} aria-hidden="true">
                       <Icon size={24} />
+                      {feature.isSelected && (
+                        <div className="absolute inset-0 bg-white/20 rounded-2xl animate-pulse-soft"></div>
+                      )}
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 mb-1">{feature.title}</h3>
-                      <p className="text-gray-800 text-sm">{feature.description}</p>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-bold text-neutral-900 mb-2 group-hover:text-primary transition-colors">
+                        {feature.title}
+                      </h3>
+                      <p className="text-neutral-600 text-sm leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                    <div className={`transition-all duration-300 ${
+                      feature.isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-75 group-hover:opacity-70 group-hover:scale-90'
+                    }`}>
+                      <div className="w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
                     </div>
                   </div>
                 </button>
@@ -244,63 +263,82 @@ export default function Features({ initialFeatureId }: FeaturesProps) {
             })}
           </div>
 
-          {/* ✅ Accessible feature details */}
-          <div className="lg:sticky lg:top-24 h-fit">
+          {/* Premium Feature Details */}
+          <div className="lg:sticky lg:top-24 h-fit animate-slide-up animate-stagger-2">
             <div 
               key={selectedFeature.id}
-              className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 animate-fade-in-fast"
+              className="card relative overflow-hidden animate-fade-in-fast"
               role="tabpanel"
               aria-labelledby={`feature-tab-${selectedFeature.id}`}
               id={`feature-panel-${selectedFeature.id}`}
             >
-              <header className="flex items-center gap-4 mb-6">
-                <div className="p-3 bg-primary text-white rounded-lg" aria-hidden="true">
-                  <selectedFeature.icon size={24} />
+              {/* Gradient Accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary to-secondary"></div>
+              
+              <header className="flex items-center gap-6 mb-8">
+                <div className="relative p-4 bg-gradient-to-br from-primary to-primary-600 text-white rounded-2xl shadow-lg" aria-hidden="true">
+                  <selectedFeature.icon size={28} />
+                  <div className="absolute inset-0 bg-white/20 rounded-2xl animate-pulse-soft"></div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-neutral-900 mb-2">
                     {selectedFeature.title}
                   </h3>
-                  <p className="text-gray-800 text-sm">{selectedFeature.description}</p>
+                  <p className="text-neutral-600 leading-relaxed">{selectedFeature.description}</p>
                 </div>
               </header>
 
-              <div className="space-y-6">
+              <div className="space-y-8">
                 {/* Feature Details */}
                 <div>
-                  <h4 className="font-semibold text-gray-800 mb-3">Características Principais:</h4>
-                  <ul className="space-y-2" role="list">
+                  <h4 className="text-lg font-bold text-neutral-900 mb-4 flex items-center gap-2">
+                    <div className="w-5 h-5 bg-gradient-to-r from-primary to-secondary rounded-full"></div>
+                    Características Principais
+                  </h4>
+                  <ul className="space-y-3" role="list">
                     {selectedFeature.details.map((detail, index) => (
-                      <li key={index} className="flex items-center gap-3 text-gray-900" role="listitem">
-                        <div className="w-2 h-2 bg-primary rounded-full" aria-hidden="true"></div>
-                        {detail}
+                      <li key={index} className="flex items-start gap-4 text-neutral-700" role="listitem">
+                        <div className="flex-shrink-0 w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center mt-0.5" aria-hidden="true">
+                          <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        </div>
+                        <span className="leading-relaxed">{detail}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
                 {/* Mock Data Preview */}
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                  <h4 className="font-semibold text-gray-800 mb-4">Visualização em Tempo Real:</h4>
-                  <div className="grid grid-cols-2 gap-4">
-                    {Object.entries(selectedFeature.mockData).map(([key, value]) => (
-                      <div key={key} className="bg-white p-3 rounded-lg border border-gray-200">
-                        <dt className="text-xs text-gray-800 capitalize mb-1">
+                <div className="bg-gradient-to-br from-neutral-50 to-neutral-100 rounded-2xl p-6 border border-neutral-200">
+                  <h4 className="text-lg font-bold text-neutral-900 mb-6 flex items-center gap-2">
+                    <div className="w-5 h-5 bg-gradient-to-r from-secondary to-primary rounded-full"></div>
+                    Visualização em Tempo Real
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {Object.entries(selectedFeature.mockData).map(([key, value], index) => (
+                      <div 
+                        key={key} 
+                        className="bg-white p-4 rounded-xl border border-neutral-200 shadow-sm hover:shadow-md transition-shadow"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <dt className="text-xs text-neutral-500 uppercase tracking-wide font-medium mb-2">
                           {key.replace(/([A-Z])/g, ' $1').trim()}
                         </dt>
-                        <dd className="text-base font-bold text-primary">{String(value)}</dd>
+                        <dd className="text-lg font-bold text-gradient">{String(value)}</dd>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Action Button */}
-                <div className="pt-4">
+                <div className="pt-2">
                   <button 
-                    className="w-full btn-primary"
+                    className="w-full btn-primary btn-ripple hover-glow group"
                     aria-label={`Experimentar ${selectedFeature.title}`}
                   >
-                    Experimentar Agora
+                    <span>Experimentar Agora</span>
+                    <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:animate-tada transition-all duration-300">
+                      <Star size={12} className="text-white animate-heartbeat" />
+                    </div>
                   </button>
                 </div>
               </div>

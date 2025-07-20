@@ -2,13 +2,16 @@
 
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X, User, MapPin, Bell } from 'lucide-react'
+import Image from 'next/image'
+import { Menu, X, User, MapPin, Bell, Star } from 'lucide-react'
 
 interface HeaderProps {
   user?: {
     id: string
     name: string
     avatar?: string
+    points?: number
+    level?: string
   }
   onLogin?: () => void
   onLogout?: () => void
@@ -20,159 +23,237 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setHasScrolled(window.scrollY > 10)
+      setHasScrolled(window.scrollY > 20)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
   
-  // ✅ Memoized callbacks for performance
   const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), [])
   const handleLogin = useCallback(() => onLogin?.(), [onLogin])
   const handleLogout = useCallback(() => {
     onLogout?.()
-    setIsMenuOpen(false) // Close menu on logout
+    setIsMenuOpen(false)
   }, [onLogout])
   
-  // ✅ Memoized computed values
   const isLoggedIn = useMemo(() => !!user, [user])
   
-  // ✅ Memoized navigation items
   const navigationItems = useMemo(() => [
     { href: '#home', label: 'Início' },
-    { href: '#marketplace', label: 'Marketplace' },
-    { href: '#guide', label: 'Guia Turístico' },
-    { href: '#about', label: 'Sobre' }
+    { href: '#marketplace', label: 'Veículos' },
+    { href: '#guide', label: 'Pontos Turísticos' },
+    { href: '#about', label: 'Ponto X' }
   ], [])
 
+  const headerClasses = useMemo(() => {
+    const base = 'fixed top-0 w-full z-50 transition-all duration-500 ease-out'
+    if (hasScrolled) {
+      return `${base} glass-header border-b border-white/10 h-16`
+    }
+    return `${base} bg-transparent h-20`
+  }, [hasScrolled])
+
+  const logoClasses = useMemo(() => {
+    if (hasScrolled) {
+      return 'h-8 w-auto transition-all duration-300'
+    }
+    return 'h-10 w-auto transition-all duration-300'
+  }, [hasScrolled])
+
+  const textClasses = useMemo(() => {
+    if (hasScrolled) {
+      return 'text-neutral-900'
+    }
+    return 'text-white'
+  }, [hasScrolled])
+
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${hasScrolled ? 'bg-white/95 backdrop-blur-md shadow-md' : 'bg-transparent'}`} role="banner">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* ✅ Semantic logo with accessibility */}
-          <Link href="/" className="flex items-center" aria-label="SX Locações - Página inicial">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center font-bold text-white text-xl">
-              SX
+    <header className={headerClasses} role="banner">
+      <div className="container-custom">
+        <div className="flex items-center justify-between h-full">
+          {/* Premium Logo */}
+          <Link 
+            href="/" 
+            className="flex items-center group" 
+            aria-label="SX Locações - Mobilidade Urbana Inteligente"
+          >
+            <div className="relative">
+              <Image
+                src="/assets/logo-2.jpg"
+                alt="SX Locações"
+                width={120}
+                height={40}
+                className={logoClasses}
+                priority
+              />
             </div>
-            <span className={`ml-2 text-xl font-bold ${hasScrolled ? 'text-gray-900' : 'text-white'}`}>Locações</span>
           </Link>
 
-          {/* ✅ Accessible desktop navigation */}
-          <nav className="hidden md:flex items-center space-x-8" role="navigation" aria-label="Navegação principal">
-            {navigationItems.map(item => (
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Navegação principal">
+            {navigationItems.map((item, index) => (
               <a 
                 key={item.href}
                 href={item.href} 
-                className={`${hasScrolled ? 'text-gray-700' : 'text-white'} hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm px-2 py-1`}
-                aria-label={`Ir para ${item.label}`}
+                className={`relative font-medium transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 rounded-lg px-3 py-2 group ${textClasses}`}
+                aria-label={`Navegar para ${item.label}`}
               >
                 {item.label}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary transition-all duration-300 group-hover:w-full"></span>
               </a>
             ))}
           </nav>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn ? (
-              <div className="flex items-center space-x-3">
-                <button className={`p-2 ${hasScrolled ? 'text-gray-600' : 'text-white'} hover:text-primary transition-colors`}>
-                  <Bell size={20} />
+              <div className="flex items-center space-x-4">
+                {/* Points Display */}
+                <div className="flex items-center gap-2 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover-lift interactive-card">
+                  <Star className="text-yellow-400 fill-current animate-heartbeat" size={16} />
+                  <span className={`text-sm font-semibold ${textClasses}`}>
+                    {user?.points || 0}
+                  </span>
+                  <span className={`text-xs px-2 py-1 rounded-full badge-bounce ${
+                    user?.level === 'Platinum' ? 'bg-purple-500/20 text-purple-300' :
+                    user?.level === 'Gold' ? 'bg-yellow-500/20 text-yellow-300' :
+                    user?.level === 'Silver' ? 'bg-gray-500/20 text-gray-300' :
+                    'bg-orange-500/20 text-orange-300'
+                  }`}>
+                    {user?.level || 'Bronze'}
+                  </span>
+                </div>
+
+                {/* Notifications */}
+                <button 
+                  className={`p-2 rounded-lg focus-ring hover-lift animate-wiggle ${textClasses}`}
+                  aria-label="Notificações"
+                >
+                  <Bell size={20} className="hover:animate-wiggle" />
                 </button>
-                <button className={`p-2 ${hasScrolled ? 'text-gray-600' : 'text-white'} hover:text-primary transition-colors`}>
-                  <MapPin size={20} />
-                </button>
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+
+                {/* User Menu */}
+                <div className="flex items-center space-x-3 px-3 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 hover-lift interactive-card">
+                  <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center animate-glow">
                     <User size={16} className="text-white" />
                   </div>
-                  <span className={`text-sm ${hasScrolled ? 'text-gray-700' : 'text-white'}`}>João Silva</span>
+                  <span className={`text-sm font-medium ${textClasses}`}>
+                    {user?.name?.split(' ')[0] || 'Usuário'}
+                  </span>
+                  <button 
+                    onClick={handleLogout}
+                    className={`text-xs opacity-75 hover:opacity-100 transition-all duration-300 hover:scale-110 focus-ring px-2 py-1 rounded ${textClasses}`}
+                    aria-label="Sair da conta"
+                  >
+                    Sair
+                  </button>
                 </div>
-                <button 
-                  onClick={handleLogout}
-                  className={`text-sm ${hasScrolled ? 'text-gray-600' : 'text-white'} hover:text-primary transition-colors`}
-                >
-                  Sair
-                </button>
               </div>
             ) : (
               <div className="flex items-center space-x-3">
                 <button 
                   onClick={handleLogin}
-                  className={`${hasScrolled ? 'text-primary' : 'text-white'} hover:text-primary-600 transition-colors font-semibold`}
+                  className={`font-medium focus-ring hover-lift px-4 py-2 rounded-lg ${textClasses}`}
                 >
                   Entrar
                 </button>
-                <button className="btn-primary">
+                <button className="btn-primary btn-ripple hover-glow">
                   Cadastrar
                 </button>
               </div>
             )}
           </div>
 
-          {/* ✅ Accessible mobile menu button */}
+          {/* Mobile Menu Button */}
           <button
             onClick={toggleMenu}
-            className={`md:hidden p-2 ${hasScrolled ? 'text-gray-600' : 'text-white'} hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 rounded-sm`}
+            className={`lg:hidden p-2 rounded-lg transition-all duration-300 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-primary/50 ${textClasses}`}
             aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
           >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            <div className="relative w-6 h-6">
+              <span className={`absolute block w-6 h-0.5 bg-current transition-all duration-300 ${
+                isMenuOpen ? 'rotate-45 top-3' : 'top-1'
+              }`}></span>
+              <span className={`absolute block w-6 h-0.5 bg-current transition-all duration-300 top-3 ${
+                isMenuOpen ? 'opacity-0' : 'opacity-100'
+              }`}></span>
+              <span className={`absolute block w-6 h-0.5 bg-current transition-all duration-300 ${
+                isMenuOpen ? '-rotate-45 top-3' : 'top-5'
+              }`}></span>
+            </div>
           </button>
         </div>
 
-        {/* ✅ Accessible mobile menu */}
-        {isMenuOpen && (
-          <div 
-            id="mobile-menu"
-            className="md:hidden bg-white border-t border-gray-100 py-4 z-50"
-            role="navigation"
-            aria-label="Menu móvel"
-          >
-            <nav className="flex flex-col space-y-4">
-              {navigationItems.map(item => (
+        {/* Mobile Menu */}
+        <div 
+          id="mobile-menu"
+          className={`lg:hidden absolute top-full left-0 right-0 transition-all duration-300 overflow-hidden ${
+            isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          }`}
+        >
+          <div className="glass-card mx-4 my-4 rounded-2xl border border-white/20">
+            <nav className="p-6 space-y-4" role="navigation" aria-label="Menu móvel">
+              {navigationItems.map((item, index) => (
                 <a 
                   key={item.href}
                   href={item.href} 
-                  className="text-black hover:text-primary transition-colors px-4 py-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+                  className="block text-neutral-800 font-medium py-3 px-4 rounded-xl transition-all duration-300 hover:bg-primary/10 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary/50"
                   onClick={toggleMenu}
-                  aria-label={`Ir para ${item.label}`}
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {item.label}
                 </a>
               ))}
-              <hr className="border-gray-200" />
+              
+              <hr className="border-neutral-200/50" />
+              
               {isLoggedIn ? (
-                <div className="px-4 space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                      <User size={16} className="text-white" />
+                <div className="space-y-4">
+                  {/* Mobile Points Display */}
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                        <User size={18} className="text-white" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-neutral-800">{user?.name}</p>
+                        <p className="text-sm text-neutral-600">{user?.level || 'Bronze'}</p>
+                      </div>
                     </div>
-                    <span className="text-sm text-black">{user?.name || 'Usuário'}</span>
+                    <div className="flex items-center gap-2">
+                      <Star className="text-yellow-500 fill-current" size={16} />
+                      <span className="font-bold text-neutral-800">{user?.points || 0}</span>
+                    </div>
                   </div>
+                  
                   <button 
                     onClick={handleLogout}
-                    className="w-full text-left text-black hover:text-primary transition-colors"
+                    className="w-full text-left text-neutral-600 hover:text-primary transition-colors py-3 px-4 rounded-xl hover:bg-primary/10"
                   >
                     Sair
                   </button>
                 </div>
               ) : (
-                <div className="px-4 space-y-3">
+                <div className="space-y-3">
                   <button 
                     onClick={handleLogin}
-                    className="w-full text-left text-primary hover:text-primary-600 transition-colors"
+                    className="w-full text-left text-primary font-medium py-3 px-4 rounded-xl hover:bg-primary/10 transition-colors"
                   >
                     Entrar
                   </button>
-                  <button className="w-full btn-primary">
+                  <button 
+                    className="w-full btn-primary justify-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     Cadastrar
                   </button>
                 </div>
               )}
             </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   )

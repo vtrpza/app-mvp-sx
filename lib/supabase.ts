@@ -108,21 +108,113 @@ export const mockDatabase = {
     }
   },
 
-  // Gamification
+  // Gamification and Points System
   gamification: {
     async checkin(userId: string, locationId: string) {
       // Mock check-in
       console.log('Mock: Check-in at', locationId, 'by user', userId)
+      
+      // Add points to user
+      await this.addPoints(userId, 50, 'check-in', `Check-in em ${locationId}`)
+      
       return { success: true, points: 50, badge: 'Explorer' }
     },
     
     async getLeaderboard() {
-      // Mock leaderboard
-      return [
-        { rank: 1, name: 'Ana Costa', points: 5420 },
-        { rank: 2, name: 'Carlos Silva', points: 4830 },
-        { rank: 3, name: 'Maria Santos', points: 4200 }
-      ]
+      const users = JSON.parse(localStorage.getItem('sx_users') || '[]')
+      return users
+        .sort((a: any, b: any) => b.points - a.points)
+        .slice(0, 10)
+        .map((user: any, index: number) => ({
+          rank: index + 1,
+          userId: user.id,
+          name: user.name,
+          points: user.points,
+          avatar: user.avatar
+        }))
+    },
+
+    async addPoints(userId: string, points: number, reason: string, description: string) {
+      // Get current users
+      const users = JSON.parse(localStorage.getItem('sx_users') || '[]')
+      const userIndex = users.findIndex((u: any) => u.id === userId)
+      
+      if (userIndex === -1) return { success: false, error: 'User not found' }
+      
+      // Update user points
+      users[userIndex].points = (users[userIndex].points || 0) + points
+      users[userIndex].level = this.calculateLevel(users[userIndex].points)
+      
+      // Save updated users
+      localStorage.setItem('sx_users', JSON.stringify(users))
+      
+      // Save points transaction
+      const transactions = JSON.parse(localStorage.getItem('sx_points_transactions') || '[]')
+      transactions.push({
+        id: Math.random().toString(36),
+        userId,
+        points,
+        reason,
+        description,
+        timestamp: new Date().toISOString()
+      })
+      localStorage.setItem('sx_points_transactions', JSON.stringify(transactions))
+      
+      return { success: true, newTotal: users[userIndex].points, level: users[userIndex].level }
+    },
+
+    calculateLevel(points: number): string {
+      if (points >= 3000) return 'Platinum'
+      if (points >= 1500) return 'Gold'
+      if (points >= 500) return 'Silver'
+      return 'Bronze'
+    },
+
+    async getUserPoints(userId: string) {
+      const users = JSON.parse(localStorage.getItem('sx_users') || '[]')
+      const user = users.find((u: any) => u.id === userId)
+      return user ? { points: user.points, level: user.level } : null
+    },
+
+    async getPointsHistory(userId: string) {
+      const transactions = JSON.parse(localStorage.getItem('sx_points_transactions') || '[]')
+      return transactions.filter((t: any) => t.userId === userId)
+    }
+  },
+
+  // Tourist Spots Management
+  touristSpots: {
+    async getAll() {
+      return JSON.parse(localStorage.getItem('sx_tourist_spots') || '[]')
+    },
+
+    async create(spotData: any) {
+      const spots = JSON.parse(localStorage.getItem('sx_tourist_spots') || '[]')
+      const newSpot = {
+        id: Math.random().toString(36),
+        ...spotData,
+        createdAt: new Date().toISOString()
+      }
+      spots.push(newSpot)
+      localStorage.setItem('sx_tourist_spots', JSON.stringify(spots))
+      return newSpot
+    },
+
+    async update(id: string, spotData: any) {
+      const spots = JSON.parse(localStorage.getItem('sx_tourist_spots') || '[]')
+      const index = spots.findIndex((s: any) => s.id === id)
+      if (index === -1) return { success: false, error: 'Spot not found' }
+      
+      spots[index] = { ...spots[index], ...spotData, updatedAt: new Date().toISOString() }
+      localStorage.setItem('sx_tourist_spots', JSON.stringify(spots))
+      return spots[index]
+    },
+
+    async delete(id: string) {
+      const spots = JSON.parse(localStorage.getItem('sx_tourist_spots') || '[]')
+      const filtered = spots.filter((s: any) => s.id !== id)
+      localStorage.setItem('sx_tourist_spots', JSON.stringify(filtered))
+      return { success: true }
     }
   }
 }
