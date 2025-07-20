@@ -79,7 +79,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
         id="home" 
         className="relative min-h-screen gradient-bg-hero overflow-hidden"
         role="banner"
-        aria-label="Apresentação principal - SX Locações"
+        aria-label="Apresentação principal - SX Locadora"
       >
         {/* Animated Background Pattern */}
         <div className="absolute inset-0 bg-pattern opacity-20" aria-hidden="true"></div>
@@ -106,7 +106,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                 </div>
                 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up">
-                  <span className="sr-only">SX Locações - </span>
+                  <span className="sr-only">SX locadora - </span>
                   Mobilidade Urbana
                   <br />
                   <span 
@@ -201,7 +201,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                           <Zap className="text-white" size={16} />
                         </div>
                         <div>
-                          <div className="font-bold text-neutral-800 text-sm sm:text-base">SX Locações</div>
+                          <div className="font-bold text-neutral-800 text-sm sm:text-base">SX Locadora</div>
                           <div className="text-xs sm:text-sm text-neutral-600">Bem-vindo de volta!</div>
                         </div>
                       </div>
