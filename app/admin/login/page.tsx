@@ -117,8 +117,8 @@ export default function AdminLogin() {
         </form>
 
         {/* Dev Info */}
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-          <p className="text-xs text-gray-500 text-center">
+        <div className="mt-6 p-4 bg-neutral-50 rounded-lg">
+          <p className="text-xs text-neutral-500 text-center">
             <strong>Credenciais de Desenvolvimento:</strong><br />
             Usuário: admin<br />
             Senha: sx2024admin
@@ -127,7 +127,7 @@ export default function AdminLogin() {
 
         {/* Footer */}
         <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-neutral-500">
             Sistema SX Locadora v1.0 - MVP
           </p>
         </div>
