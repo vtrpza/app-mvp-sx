@@ -25,8 +25,13 @@ const defaultStats = {
 export default function Hero({ stats = defaultStats }: HeroProps) {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
   const [currentWord, setCurrentWord] = useState(0)
+  const { elementRef: statsRef, isVisible: statsVisible } = useScrollAnimation()
   
   const words = ['Inteligente', 'Sustentável', 'Conectada', 'Inovadora']
+  
+  // Animated counters
+  const animatedScooters = useCountUpAnimation(stats.scooters, statsVisible, 2000)
+  const animatedUsers = useCountUpAnimation(stats.users, statsVisible, 2500)
   
   useEffect(() => {
     const interval = setInterval(() => {

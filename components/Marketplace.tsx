@@ -389,13 +389,13 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
                         <button
                           onClick={() => handleRent(vehicle)}
                           disabled={!vehicle.available}
-                          className={`btn-primary group ${!vehicle.available && 'opacity-50 cursor-not-allowed'}`}
+                          className={`btn-primary btn-ripple hover-glow group ${!vehicle.available && 'opacity-50 cursor-not-allowed'}`}
                           aria-label={`Alugar ${vehicle.name}`}
                         >
                           <span>{vehicle.available ? 'Alugar Agora' : 'Indisponível'}</span>
                           {vehicle.available && (
-                            <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                              <CreditCard size={12} className="text-white" />
+                            <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:animate-tada transition-all duration-300">
+                              <CreditCard size={12} className="text-white animate-heartbeat" />
                             </div>
                           )}
                         </button>
