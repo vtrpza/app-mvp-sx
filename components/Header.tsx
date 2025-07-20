@@ -79,8 +79,8 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
           >
             <div className="relative">
               <Image
-                src="/assets/logo-2.jpg"
-                alt="SX Locações"
+                src="/assets/logo-2.svg"
+                alt="SX Locações - Patinetes Elétricos"
                 width={120}
                 height={40}
                 className={logoClasses}

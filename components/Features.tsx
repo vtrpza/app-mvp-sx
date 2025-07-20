@@ -10,20 +10,8 @@ import {
   Map, 
   Trophy, 
   MessageCircle,
-  Upload,
-  Clock,
-  Shield,
   Star
 } from 'lucide-react'
-
-interface Feature {
-  id: string
-  icon: React.ElementType
-  title: string
-  description: string
-  details: string[]
-  mockData: Record<string, any>
-}
 
 interface FeaturesProps {
   initialFeatureId?: string
@@ -198,10 +186,10 @@ export default function Features({ initialFeatureId }: FeaturesProps) {
             <Star className="text-primary" size={16} />
             <span className="text-sm font-medium text-primary">Funcionalidades Premium</span>
           </div>
-          <h2 id="features-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 text-balance">
+          <h2 id="features-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
             Tecnologia <span className="text-gradient">Inovadora</span> ao Seu Alcance
           </h2>
-          <p className="text-xl text-neutral-600 max-w-2xl text-balance">
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
             Descubra recursos exclusivos que transformam sua experiência de mobilidade urbana
           </p>
         </header>

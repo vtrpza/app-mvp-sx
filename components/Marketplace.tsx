@@ -33,7 +33,6 @@ const validateVehicleData = (vehicle: any): boolean => {
 
 interface MarketplaceProps {
   vehicles?: typeof mockVehicles
-  onRent?: (vehicleId: number) => Promise<void>
 }
 
 const categories = [
@@ -98,14 +97,13 @@ const mockVehicles = [
   }
 ]
 
-export default function Marketplace({ vehicles = mockVehicles, onRent }: MarketplaceProps) {
+export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProps) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [isPending, startTransition] = useTransition()
   const [selectedVehicle, setSelectedVehicle] = useState<typeof mockVehicles[0] | null>(null)
   const [showChoiceModal, setShowChoiceModal] = useState(false)
   const [showRegisterModal, setShowRegisterModal] = useState(false)
-  const [currentUser, setCurrentUser] = useState<any>(null)
   
   // ✅ Memoized and optimized filtering
   const filteredVehicles = useMemo(() => {
@@ -154,7 +152,6 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
   }, [])
 
   const handleRegistrationSuccess = useCallback((user: any) => {
-    setCurrentUser(user)
     setShowRegisterModal(false)
     // Show success message or redirect
     alert(`Parabéns ${user.name}! Você ganhou 100 pontos de boas-vindas!`)
@@ -168,10 +165,10 @@ export default function Marketplace({ vehicles = mockVehicles, onRent }: Marketp
             <CreditCard className="text-primary" size={16} />
             <span className="text-sm font-medium text-primary">Marketplace Premium</span>
           </div>
-          <h2 id="marketplace-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6 text-balance">
+          <h2 id="marketplace-heading" className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6">
             Veículos <span className="text-gradient">Recreativos</span> para Todos
           </h2>
-          <p className="text-xl text-neutral-600 max-w-2xl text-balance">
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
             Explore nossa seleção premium de veículos com segurança garantida e processo simplificado
           </p>
         </header>

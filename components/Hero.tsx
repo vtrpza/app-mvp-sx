@@ -105,7 +105,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                   <span className="text-sm font-medium">Sistema Ponto X Disponível</span>
                 </div>
                 
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up text-balance">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up">
                   <span className="sr-only">SX Locações - </span>
                   Mobilidade Urbana
                   <br />
@@ -117,7 +117,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                   </span>
                 </h1>
                 
-                <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-lg leading-relaxed animate-slide-up animate-stagger-1 text-balance lg:mx-0">
+                <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-2xl leading-relaxed animate-slide-up animate-stagger-1 mx-auto lg:mx-0">
                   Descubra a cidade de forma <strong>sustentável</strong> e <strong>inteligente</strong>. 
                   Alugue veículos, ganhe pontos e explore pontos turísticos únicos.
                 </p>

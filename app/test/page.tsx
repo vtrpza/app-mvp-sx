@@ -1,7 +1,7 @@
 export default function TestPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl">
         <h1 className="text-4xl font-bold text-primary mb-6">
           Tailwind CSS v4 Test
         </h1>
