@@ -44,7 +44,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
   
   const quickStats = useMemo(() => [
     { 
-      value: `${stats.scooters}+`, 
+      value: `${animatedScooters}+`, 
       label: 'Veículos',
       icon: MapPin,
       color: 'text-blue-400'
@@ -62,12 +62,12 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
       color: 'text-yellow-400'
     },
     { 
-      value: `${stats.users}+`, 
+      value: `${animatedUsers}+`, 
       label: 'Usuários',
       icon: Users,
       color: 'text-purple-400'
     }
-  ], [stats])
+  ], [animatedScooters, animatedUsers, stats.availability, stats.rating])
 
   const scrollToSection = useCallback(() => {
     document.getElementById('marketplace')?.scrollIntoView({ behavior: 'smooth' })
@@ -145,7 +145,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 animate-slide-up animate-stagger-3" role="region" aria-label="Estatísticas do serviço">
+              <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 animate-slide-up animate-stagger-3" role="region" aria-label="Estatísticas do serviço">
                 {quickStats.map((stat, index) => {
                   const Icon = stat.icon
                   return (
