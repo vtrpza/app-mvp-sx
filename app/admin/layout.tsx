@@ -87,26 +87,26 @@ export default function AdminLayout({
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
+      <div className={`fixed inset-y-0 left-0 z-50 w-72 sm:w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-4 sm:px-6 border-b border-gray-200 safe-top">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">SX</span>
+            <div className="w-10 h-10 sm:w-8 sm:h-8 bg-primary rounded-xl sm:rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-base sm:text-sm">SX</span>
             </div>
-            <span className="font-bold text-gray-900">Admin</span>
+            <span className="font-bold text-gray-900 mobile-text-lg">Admin</span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden p-1 text-gray-400 hover:text-gray-600"
+            className="lg:hidden p-3 sm:p-1 text-gray-400 hover:text-gray-600 touch-target"
           >
-            <X size={20} />
+            <X size={24} className="sm:w-5 sm:h-5" />
           </button>
         </div>
 
-        <nav className="mt-8 px-4">
-          <ul className="space-y-2">
+        <nav className="mt-8 px-4 pb-8">
+          <ul className="space-y-3 sm:space-y-2">
             {navigation.map((item) => {
               const isActive = pathname === item.href
               const Icon = item.icon
@@ -115,13 +115,13 @@ export default function AdminLayout({
                 <li key={item.name}>
                   <a
                     href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    className={`mobile-nav-item flex items-center gap-3 font-medium transition-colors touch-target ${
                       isActive
                         ? 'bg-primary text-white'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                   >
-                    <Icon size={18} />
+                    <Icon size={20} className="sm:w-[18px] sm:h-[18px]" />
                     {item.name}
                   </a>
                 </li>
@@ -132,9 +132,9 @@ export default function AdminLayout({
           <div className="mt-8 pt-8 border-t border-gray-200">
             <button
               onClick={handleLogout}
-              className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg w-full transition-colors"
+              className="mobile-nav-item flex items-center gap-3 font-medium text-red-600 hover:bg-red-50 w-full transition-colors touch-target"
             >
-              <LogOut size={18} />
+              <LogOut size={20} className="sm:w-[18px] sm:h-[18px]" />
               Sair
             </button>
           </div>
@@ -144,17 +144,17 @@ export default function AdminLayout({
       {/* Main content */}
       <div className="lg:pl-64">
         {/* Top bar */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white shadow-sm border-b border-gray-200 safe-top">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 text-gray-400 hover:text-gray-600"
+              className="lg:hidden p-3 sm:p-2 text-gray-400 hover:text-gray-600 touch-target"
             >
-              <Menu size={20} />
+              <Menu size={24} className="sm:w-5 sm:h-5" />
             </button>
 
             <div className="flex items-center gap-4">
-              <span className="text-sm text-gray-500">
+              <span className="text-base sm:text-sm text-gray-500">
                 Logado como: <span className="font-medium text-gray-900">Admin</span>
               </span>
             </div>
@@ -162,7 +162,7 @@ export default function AdminLayout({
         </header>
 
         {/* Page content */}
-        <main className="p-4 sm:p-6 lg:p-8">
+        <main className="mobile-section safe-bottom">
           {children}
         </main>
       </div>

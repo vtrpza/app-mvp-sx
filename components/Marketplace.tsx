@@ -173,7 +173,7 @@ export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProp
           </p>
         </header>
 
-        <div className="grid lg:grid-cols-4 gap-6 lg:gap-8 animate-slide-up animate-stagger-1">
+        <div className="mobile-grid lg:grid-cols-4 animate-slide-up animate-stagger-1">
           {/* Premium Filters Sidebar */}
           <aside className="lg:col-span-1 order-2 lg:order-1" role="complementary" aria-label="Filtros de busca">
             <div className="card sticky top-24">
@@ -283,7 +283,7 @@ export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProp
               </div>
             )}
             
-            <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8" role="list">
+            <div className="mobile-grid-2 lg:grid-cols-1" role="list">
               {filteredVehicles.map((vehicle, index) => (
                 <article 
                   key={vehicle.id} 
@@ -330,7 +330,7 @@ export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProp
                     </header>
                     
                     {/* Location & Availability */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4 mb-6">
+                    <div className="mobile-grid-2 gap-3 mb-6">
                       <div className="flex items-center gap-3 p-3 bg-neutral-50 rounded-xl">
                         <div className="p-2 bg-primary/10 rounded-lg">
                           <MapPin size={16} className="text-primary" />
