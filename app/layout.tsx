@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import type { ReactNode } from 'react'
 import PerformanceOptimizer from '@/components/PerformanceOptimizer'
+import ClientInitializer from '@/components/ClientInitializer'
 import './globals.css'
 
 const inter = Inter({ 
@@ -84,6 +85,7 @@ export default function RootLayout({
       </head>
       <body className={`${inter.variable} font-sans`}>
         <PerformanceOptimizer />
+        <ClientInitializer />
         <div id="root">
           {children}
         </div>

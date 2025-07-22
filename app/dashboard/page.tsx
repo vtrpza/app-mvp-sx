@@ -17,10 +17,15 @@ import {
   Flame,
   CheckCircle,
   ArrowRight,
-  BarChart3
+  BarChart3,
+  LogOut,
+  Settings,
+  Home
 } from 'lucide-react'
 import { mockDatabase } from '@/lib/supabase'
 import UserPointsDisplay from '@/components/UserPointsDisplay'
+import AuthGuard, { useAuth } from '@/components/AuthGuard'
+import { useRouter } from 'next/navigation'
 
 interface UserStats {
   user: {
@@ -50,7 +55,9 @@ interface UserStats {
   }
 }
 
-export default function UserDashboard() {
+function DashboardContent() {
+  const { user, logout } = useAuth()
+  const router = useRouter()
   const [userStats, setUserStats] = useState<UserStats | null>(null)
   const [leaderboard, setLeaderboard] = useState<any[]>([])
   const [achievements, setAchievements] = useState<any[]>([])
@@ -60,40 +67,9 @@ export default function UserDashboard() {
 
   useEffect(() => {
     const loadDashboard = async () => {
+      if (!user) return
+
       try {
-        // Get current user from localStorage
-        const currentUser = JSON.parse(localStorage.getItem('sx_current_user') || 'null')
-        if (!currentUser) {
-          // Create a mock user for demo purposes
-          const mockUser = {
-            id: 'demo-user',
-            name: 'João Silva',
-            email: 'joao@example.com',
-            points: 1250,
-            level: 'Silver',
-            achievements: [
-              {
-                id: 'first_rental',
-                name: 'Primeiro Aluguel',
-                description: 'Complete seu primeiro aluguel',
-                icon: '🚲',
-                unlockedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-              }
-            ]
-          }
-          localStorage.setItem('sx_current_user', JSON.stringify(mockUser))
-          
-          // Add to users list
-          const users = JSON.parse(localStorage.getItem('sx_users') || '[]')
-          if (!users.find((u: any) => u.id === mockUser.id)) {
-            users.push(mockUser)
-            localStorage.setItem('sx_users', JSON.stringify(users))
-          }
-        }
-
-        const user = currentUser || JSON.parse(localStorage.getItem('sx_current_user') || 'null')
-        if (!user) return
-
         // Load comprehensive user stats
         const stats = await mockDatabase.gamification.getUserStats(user.id)
         setUserStats(stats)
@@ -117,10 +93,9 @@ export default function UserDashboard() {
     }
 
     loadDashboard()
-  }, [])
+  }, [user])
 
   const handleRedeemReward = async (rewardId: string) => {
-    const user = JSON.parse(localStorage.getItem('sx_current_user') || 'null')
     if (!user) return
 
     try {
@@ -149,6 +124,17 @@ export default function UserDashboard() {
     )
   }
 
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando dados do usuário...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -156,19 +142,44 @@ export default function UserDashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+              <button
+                onClick={() => router.push('/')}
+                className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center hover:bg-primary/90 transition-colors"
+              >
                 <Star className="text-white" size={20} />
-              </div>
+              </button>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Ponto X Dashboard</h1>
-                <p className="text-sm text-gray-600">Bem-vindo, {userStats.user.name}!</p>
+                <p className="text-sm text-gray-600">Bem-vindo, {user?.name}!</p>
               </div>
             </div>
-            <UserPointsDisplay 
-              points={userStats.user.points}
-              level={userStats.user.level}
-              showDetails={true}
-            />
+            
+            <div className="flex items-center gap-4">
+              <UserPointsDisplay 
+                points={user?.points || 0}
+                level={user?.level || 'Bronze'}
+                showDetails={true}
+              />
+              
+              {/* User Menu */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => router.push('/')}
+                  className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Voltar ao início"
+                >
+                  <Home size={20} />
+                </button>
+                
+                <button
+                  onClick={logout}
+                  className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  title="Sair"
+                >
+                  <LogOut size={20} />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -317,6 +328,19 @@ export default function UserDashboard() {
                       <p className="text-sm">Comece a usar o sistema para ver suas atividades aqui!</p>
                     </div>
                   )}
+                  
+                  {/* View All History Link */}
+                  {userStats.recent.transactions.length > 0 && (
+                    <div className="border-t border-gray-100 pt-4 mt-4">
+                      <button
+                        onClick={() => router.push('/points-history')}
+                        className="w-full text-center text-green-600 hover:text-green-700 font-medium text-sm flex items-center justify-center gap-2 py-2"
+                      >
+                        Ver histórico completo
+                        <ArrowRight size={14} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -339,6 +363,17 @@ export default function UserDashboard() {
               <div className="bg-white rounded-xl border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Ações Rápidas</h3>
                 <div className="space-y-3">
+                  <button 
+                    onClick={() => router.push('/tourist-spots')}
+                    className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-green-50 to-green-100 rounded-lg border border-green-200 hover:border-green-300 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <MapPin className="text-green-600" size={20} />
+                      <span className="font-medium text-gray-900">Pontos Turísticos</span>
+                    </div>
+                    <ArrowRight size={16} className="text-gray-400" />
+                  </button>
+                  
                   <button 
                     onClick={() => setActiveTab('rewards')}
                     className="w-full flex items-center justify-between p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg border border-primary/20 hover:border-primary/40 transition-colors"
@@ -485,5 +520,13 @@ export default function UserDashboard() {
         )}
       </div>
     </div>
+  )
+}
+
+export default function UserDashboard() {
+  return (
+    <AuthGuard>
+      <DashboardContent />
+    </AuthGuard>
   )
 }
