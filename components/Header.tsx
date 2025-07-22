@@ -157,9 +157,12 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
                   <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center animate-glow">
                     <User size={16} className="text-white" />
                   </div>
-                  <span className={`text-sm font-medium ${textClasses}`}>
+                  <Link 
+                    href="/dashboard"
+                    className={`text-sm font-medium hover:scale-105 transition-transform ${textClasses}`}
+                  >
                     {user?.name?.split(' ')[0] || 'Usuário'}
-                  </span>
+                  </Link>
                   <button 
                     onClick={handleLogout}
                     className={`text-xs opacity-75 hover:opacity-100 transition-all duration-300 hover:scale-110 focus-ring px-2 py-1 rounded ${textClasses}`}
@@ -171,15 +174,18 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
               </div>
             ) : (
               <div className="flex items-center space-x-3">
-                <button 
-                  onClick={handleLogin}
-                  className={`font-medium focus-ring hover-lift px-4 py-2 rounded-lg ${textClasses}`}
+                <Link 
+                  href="/auth"
+                  className={`font-medium focus-ring hover-lift px-4 py-2 rounded-lg transition-all duration-300 ${textClasses}`}
                 >
                   Entrar
-                </button>
-                <button className="btn-primary btn-ripple hover-glow">
+                </Link>
+                <Link 
+                  href="/auth" 
+                  className="btn-primary btn-ripple hover-glow"
+                >
                   Cadastrar
-                </button>
+                </Link>
               </div>
             )}
           </div>
@@ -260,18 +266,20 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <button 
-                    onClick={handleLogin}
-                    className="w-full text-primary font-semibold py-4 px-6 rounded-2xl hover:bg-primary/10 transition-all duration-300 text-lg hover-lift focus-ring border-2 border-primary/20"
+                  <Link 
+                    href="/auth"
+                    className="w-full text-primary font-semibold py-4 px-6 rounded-2xl hover:bg-primary/10 transition-all duration-300 text-lg hover-lift focus-ring border-2 border-primary/20 block text-center"
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     Entrar na Conta
-                  </button>
-                  <button 
-                    className="w-full btn-primary btn-ripple hover-glow justify-center text-lg py-4"
+                  </Link>
+                  <Link 
+                    href="/auth"
+                    className="w-full btn-primary btn-ripple hover-glow justify-center text-lg py-4 block text-center"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Criar Conta
-                  </button>
+                  </Link>
                 </div>
               )}
             </nav>
