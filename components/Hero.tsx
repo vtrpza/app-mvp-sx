@@ -96,16 +96,16 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center min-h-screen pt-20 pb-8">
             
             {/* Content Side */}
-            <div className="text-white space-y-6 lg:space-y-8 animate-slide-right px-4 lg:px-0" role="main">
+            <div className="hero-content text-white space-y-6 lg:space-y-8 animate-slide-right px-4 lg:px-0" role="main">
               
               {/* Main Headline */}
               <div className="space-y-4 lg:space-y-6 text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 animate-fade-in">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 animate-fade-in mx-auto lg:mx-0">
                   <Award className="text-yellow-400" size={16} />
                   <span className="text-sm font-medium">Sistema Ponto X Disponível</span>
                 </div>
                 
-                <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight animate-slide-up">
                   <span className="sr-only">SX locadora - </span>
                   Mobilidade Urbana
                   <br />
@@ -117,7 +117,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
                   </span>
                 </h1>
                 
-                <p className="text-lg sm:text-xl md:text-2xl text-white leading-relaxed animate-slide-up animate-stagger-1 text-center lg:text-left">
+                <p className="text-xl sm:text-2xl text-white/90 leading-relaxed animate-slide-up animate-stagger-1 text-center lg:text-left max-w-2xl mx-auto lg:mx-0">
                   Descubra a cidade de forma <strong className="text-yellow-200">sustentável</strong> e <strong className="text-yellow-200">inteligente</strong>. 
                   Alugue veículos, ganhe pontos e explore pontos turísticos únicos.
                 </p>

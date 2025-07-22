@@ -25,8 +25,10 @@ interface User {
   email: string
   phone?: string
   points: number
-  level: 'Bronze' | 'Silver' | 'Gold' | 'Platinum'
+  level: 'Bronze' | 'Silver' | 'Gold' | 'Platinum' | 'Diamond'
   createdAt: string
+  achievements?: any[]
+  currentStreak?: number
 }
 
 export default function AdminUsers() {
@@ -39,11 +41,33 @@ export default function AdminUsers() {
   const [pointsAmount, setPointsAmount] = useState('')
 
   useEffect(() => {
-    const loadUsers = () => {
+    const loadUsers = async () => {
       try {
         const storedUsers = JSON.parse(localStorage.getItem('sx_users') || '[]')
-        setUsers(storedUsers)
-        setFilteredUsers(storedUsers)
+        
+        // Enrich users with gamification data
+        const enrichedUsers = await Promise.all(
+          storedUsers.map(async (user: User) => {
+            try {
+              const streaks = await mockDatabase.gamification.getUserStreaks(user.id)
+              return {
+                ...user,
+                currentStreak: streaks.current || 0,
+                achievements: user.achievements || []
+              }
+            } catch (error) {
+              console.error('Error loading user streaks:', error)
+              return {
+                ...user,
+                currentStreak: 0,
+                achievements: user.achievements || []
+              }
+            }
+          })
+        )
+        
+        setUsers(enrichedUsers)
+        setFilteredUsers(enrichedUsers)
       } catch (error) {
         console.error('Error loading users:', error)
       } finally {
@@ -75,9 +99,27 @@ export default function AdminUsers() {
       )
 
       if (result.success) {
-        // Reload users
+        // Reload users with gamification data
         const storedUsers = JSON.parse(localStorage.getItem('sx_users') || '[]')
-        setUsers(storedUsers)
+        const enrichedUsers = await Promise.all(
+          storedUsers.map(async (user: User) => {
+            try {
+              const streaks = await mockDatabase.gamification.getUserStreaks(user.id)
+              return {
+                ...user,
+                currentStreak: streaks.current || 0,
+                achievements: user.achievements || []
+              }
+            } catch (error) {
+              return {
+                ...user,
+                currentStreak: 0,
+                achievements: user.achievements || []
+              }
+            }
+          })
+        )
+        setUsers(enrichedUsers)
         setShowAddPoints(null)
         setPointsAmount('')
       }
@@ -92,6 +134,7 @@ export default function AdminUsers() {
       case 'Silver': return 'bg-gray-100 text-gray-800 border-gray-200'
       case 'Gold': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
       case 'Platinum': return 'bg-purple-100 text-purple-800 border-purple-200'
+      case 'Diamond': return 'bg-blue-100 text-blue-800 border-blue-200'
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
@@ -102,6 +145,7 @@ export default function AdminUsers() {
       case 'Silver': return '🥈'
       case 'Gold': return '🥇'
       case 'Platinum': return '💎'
+      case 'Diamond': return '💠'
       default: return '⭐'
     }
   }
@@ -132,8 +176,8 @@ export default function AdminUsers() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {['Bronze', 'Silver', 'Gold', 'Platinum'].map(level => {
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].map(level => {
           const count = users.filter(u => u.level === level).length
           return (
             <div key={level} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
@@ -178,6 +222,7 @@ export default function AdminUsers() {
               <option value="Silver">Silver</option>
               <option value="Gold">Gold</option>
               <option value="Platinum">Platinum</option>
+              <option value="Diamond">Diamond</option>
             </select>
           </div>
         </div>
@@ -201,6 +246,9 @@ export default function AdminUsers() {
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Pontos
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Gamificação
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Cadastro
@@ -249,6 +297,20 @@ export default function AdminUsers() {
                         <span className="text-sm font-semibold text-gray-900">
                           {user.points.toLocaleString()}
                         </span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                          <Award size={12} className="text-purple-500" />
+                          <span>{user.achievements?.length || 0} conquistas</span>
+                        </div>
+                        {user.currentStreak && user.currentStreak > 0 && (
+                          <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <TrendingUp size={12} className="text-orange-500" />
+                            <span>{user.currentStreak} dias streak</span>
+                          </div>
+                        )}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

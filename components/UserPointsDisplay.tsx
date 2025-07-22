@@ -7,14 +7,30 @@ import { mockDatabase } from '@/lib/supabase'
 interface UserPointsDisplayProps {
   userId?: string
   compact?: boolean
+  points?: number
+  level?: string
+  showDetails?: boolean
 }
 
-export default function UserPointsDisplay({ userId, compact = false }: UserPointsDisplayProps) {
+export default function UserPointsDisplay({ 
+  userId, 
+  compact = false, 
+  points: propPoints, 
+  level: propLevel, 
+  showDetails = true 
+}: UserPointsDisplayProps) {
   const [userPoints, setUserPoints] = useState<any>(null)
   const [pointsHistory, setPointsHistory] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // If points and level are provided as props, use them directly
+    if (propPoints !== undefined && propLevel) {
+      setUserPoints({ points: propPoints, level: propLevel })
+      setLoading(false)
+      return
+    }
+
     const loadUserData = async () => {
       let currentUserId = userId
       
@@ -49,7 +65,7 @@ export default function UserPointsDisplay({ userId, compact = false }: UserPoint
     }
 
     loadUserData()
-  }, [userId])
+  }, [userId, propPoints, propLevel])
 
   if (loading) {
     return (
@@ -67,6 +83,7 @@ export default function UserPointsDisplay({ userId, compact = false }: UserPoint
       case 'Silver': return 'text-gray-600 bg-gray-100'
       case 'Gold': return 'text-yellow-600 bg-yellow-100'
       case 'Platinum': return 'text-purple-600 bg-purple-100'
+      case 'Diamond': return 'text-blue-600 bg-blue-100'
       default: return 'text-gray-600 bg-gray-100'
     }
   }
@@ -76,7 +93,8 @@ export default function UserPointsDisplay({ userId, compact = false }: UserPoint
       { name: 'Bronze', min: 0 },
       { name: 'Silver', min: 500 },
       { name: 'Gold', min: 1500 },
-      { name: 'Platinum', min: 3000 }
+      { name: 'Platinum', min: 3000 },
+      { name: 'Diamond', min: 10000 }
     ]
 
     const currentIndex = levels.findIndex(l => l.name === currentLevel)
@@ -131,7 +149,7 @@ export default function UserPointsDisplay({ userId, compact = false }: UserPoint
       </div>
 
       {/* Progress to Next Level */}
-      {nextLevel && (
+      {showDetails && nextLevel && (
         <div className="mb-6">
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="text-gray-600">Próximo nível: {nextLevel.name}</span>
@@ -149,7 +167,7 @@ export default function UserPointsDisplay({ userId, compact = false }: UserPoint
       )}
 
       {/* Recent Activity */}
-      {pointsHistory.length > 0 && (
+      {showDetails && pointsHistory.length > 0 && (
         <div>
           <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
             <TrendingUp size={16} />
@@ -175,15 +193,17 @@ export default function UserPointsDisplay({ userId, compact = false }: UserPoint
       )}
 
       {/* Call to Action */}
-      <div className="mt-6 p-4 bg-white rounded-lg border border-primary/20">
-        <div className="flex items-center gap-3">
-          <Gift className="text-primary" size={20} />
-          <div>
-            <p className="font-medium text-gray-900">Ganhe mais pontos!</p>
-            <p className="text-sm text-gray-600">Faça check-in em pontos turísticos</p>
+      {showDetails && (
+        <div className="mt-6 p-4 bg-white rounded-lg border border-primary/20">
+          <div className="flex items-center gap-3">
+            <Gift className="text-primary" size={20} />
+            <div>
+              <p className="font-medium text-gray-900">Ganhe mais pontos!</p>
+              <p className="text-sm text-gray-600">Faça check-in em pontos turísticos</p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

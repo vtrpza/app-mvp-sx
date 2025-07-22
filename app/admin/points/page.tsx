@@ -30,12 +30,16 @@ interface PointsConfig {
     Silver: number
     Gold: number
     Platinum: number
+    Diamond: number
   }
   actions: {
     register: number
     checkin: number
     referral: number
     review: number
+    rental: number
+    daily_streak: number
+    achievement: number
   }
 }
 
@@ -49,13 +53,17 @@ export default function PointsAdmin() {
       Bronze: 0,
       Silver: 500,
       Gold: 1500,
-      Platinum: 3000
+      Platinum: 3000,
+      Diamond: 10000
     },
     actions: {
       register: 100,
       checkin: 50,
       referral: 200,
-      review: 25
+      review: 25,
+      rental: 10,
+      daily_streak: 30,
+      achievement: 100
     }
   })
   const [showConfig, setShowConfig] = useState(false)
@@ -146,6 +154,7 @@ export default function PointsAdmin() {
       Silver: users.filter(u => u.level === 'Silver').length,
       Gold: users.filter(u => u.level === 'Gold').length,
       Platinum: users.filter(u => u.level === 'Platinum').length,
+      Diamond: users.filter(u => u.level === 'Diamond').length,
     }
   }
 
@@ -217,7 +226,7 @@ export default function PointsAdmin() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Usuários Gold+</p>
-              <p className="text-2xl font-bold text-gray-900">{stats.levelDistribution.Gold + stats.levelDistribution.Platinum}</p>
+              <p className="text-2xl font-bold text-gray-900">{stats.levelDistribution.Gold + stats.levelDistribution.Platinum + stats.levelDistribution.Diamond}</p>
             </div>
             <Award className="text-purple-500" size={24} />
           </div>
@@ -227,18 +236,20 @@ export default function PointsAdmin() {
       {/* Level Distribution */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Distribuição por Nível</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {Object.entries(stats.levelDistribution).map(([level, count]) => (
             <div key={level} className="text-center p-4 rounded-lg bg-gray-50">
               <div className={`w-12 h-12 rounded-full mb-2 flex items-center justify-center ${
                 level === 'Bronze' ? 'bg-orange-100' :
                 level === 'Silver' ? 'bg-gray-100' :
-                level === 'Gold' ? 'bg-yellow-100' : 'bg-purple-100'
+                level === 'Gold' ? 'bg-yellow-100' :
+                level === 'Platinum' ? 'bg-purple-100' : 'bg-blue-100'
               }`}>
                 <Award className={`${
                   level === 'Bronze' ? 'text-orange-600' :
                   level === 'Silver' ? 'text-gray-600' :
-                  level === 'Gold' ? 'text-yellow-600' : 'text-purple-600'
+                  level === 'Gold' ? 'text-yellow-600' :
+                  level === 'Platinum' ? 'text-purple-600' : 'text-blue-600'
                 }`} size={24} />
               </div>
               <p className="font-bold text-gray-900">{count}</p>
@@ -273,6 +284,7 @@ export default function PointsAdmin() {
               <option value="Silver">Silver</option>
               <option value="Gold">Gold</option>
               <option value="Platinum">Platinum</option>
+              <option value="Diamond">Diamond</option>
             </select>
           </div>
         </div>
@@ -311,7 +323,8 @@ export default function PointsAdmin() {
                         user.level === 'Bronze' ? 'bg-orange-100 text-orange-700' :
                         user.level === 'Silver' ? 'bg-gray-100 text-gray-700' :
                         user.level === 'Gold' ? 'bg-yellow-100 text-yellow-700' :
-                        'bg-purple-100 text-purple-700'
+                        user.level === 'Platinum' ? 'bg-purple-100 text-purple-700' :
+                        'bg-blue-100 text-blue-700'
                       }`}>
                         {user.level}
                       </span>
@@ -375,7 +388,13 @@ export default function PointsAdmin() {
                 <div className="space-y-3">
                   {Object.entries(config.levels).map(([level, points]) => (
                     <div key={level} className="flex items-center justify-between">
-                      <label className="text-sm font-medium text-gray-700">{level}</label>
+                      <label className="text-sm font-medium text-gray-700">
+                        {level === 'Diamond' ? '💠 Diamond' :
+                         level === 'Platinum' ? '💎 Platinum' :
+                         level === 'Gold' ? '🥇 Gold' :
+                         level === 'Silver' ? '🥈 Silver' :
+                         '🥉 Bronze'}
+                      </label>
                       <input
                         type="number"
                         min="0"
@@ -422,6 +441,19 @@ export default function PointsAdmin() {
                     />
                   </div>
                   <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-gray-700">Aluguel</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={config.actions.rental}
+                      onChange={(e) => setConfig(prev => ({
+                        ...prev,
+                        actions: { ...prev.actions, rental: parseInt(e.target.value) || 0 }
+                      }))}
+                      className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
                     <label className="text-sm font-medium text-gray-700">Indicação</label>
                     <input
                       type="number"
@@ -443,6 +475,32 @@ export default function PointsAdmin() {
                       onChange={(e) => setConfig(prev => ({
                         ...prev,
                         actions: { ...prev.actions, review: parseInt(e.target.value) || 0 }
+                      }))}
+                      className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-gray-700">Streak Diário</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={config.actions.daily_streak}
+                      onChange={(e) => setConfig(prev => ({
+                        ...prev,
+                        actions: { ...prev.actions, daily_streak: parseInt(e.target.value) || 0 }
+                      }))}
+                      className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-gray-700">Conquista</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={config.actions.achievement}
+                      onChange={(e) => setConfig(prev => ({
+                        ...prev,
+                        actions: { ...prev.actions, achievement: parseInt(e.target.value) || 0 }
                       }))}
                       className="w-20 px-2 py-1 border border-gray-300 rounded text-sm"
                     />

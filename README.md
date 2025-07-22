@@ -1,189 +1,185 @@
-# SX Locadora - Mobile First PWA
+# SX Locações - Mobility Rental Platform MVP
 
-Uma aplicação web progressiva (PWA) moderna para aluguel de patinetes, bikes e veículos recreativos com funcionalidades avançadas de mobilidade urbana sustentável.
+🚲 **Plataforma de mobilidade urbana com sistema de gamificação Ponto X integrado**
 
-## 🚀 Funcionalidades
+Uma aplicação web progressiva (PWA) moderna para aluguel de patinetes, bikes e veículos recreativos com sistema completo de gamificação e painel administrativo.
 
-### ✅ Implementadas
+## 🌟 Funcionalidades Principais
 
-1. **Cadastro Inteligente**
-   - Upload de documentos com validação
-   - Análise automatizada + validação manual
-   - Aprovação automática para clientes recorrentes
+### 🎯 Para Usuários
+- **Aluguel de Veículos**: Scooters e bikes disponíveis na cidade
+- **Sistema Ponto X**: Gamificação completa com pontos, níveis e recompensas
+- **Dashboard Pessoal**: Acompanhe seus pontos, conquistas e progresso
+- **Check-in em Pontos Turísticos**: Ganhe pontos visitando locais incríveis
+- **Sistema de Níveis**: Bronze, Silver, Gold, Platinum, Diamond
+- **Conquistas**: 8 tipos diferentes de achievements para desbloquear
+- **Recompensas**: Sistema de resgate com descontos e benefícios
 
-2. **Contrato Digital**
-   - Assinatura eletrônica válida
-   - Registro de IP, geolocalização e timestamp
-   - Botão "Li e autorizo" com consentimento jurídico
+### 🛠️ Para Administradores
+- **Dashboard Completo**: Visão geral do sistema e estatísticas
+- **Gestão de Usuários**: Visualize, filtre e gerencie todos os usuários
+- **Sistema de Pontos**: Configure pontos por ação e níveis
+- **Pontos Turísticos**: CRUD completo com upload de imagens
+- **Controle de Gamificação**: Ajuste manual de pontos e níveis
 
-3. **Programa de Fidelidade "Ponto X"**
-   - Acúmulo de pontos por uso e indicações
-   - Sistema de níveis (Bronze, Silver, Gold, Platinum)
-   - Troca por benefícios reais (descontos, gratuidades)
+## 🚀 Deploy na Vercel
 
-4. **Geolocalização em Tempo Real**
-   - Localização de patinetes e veículos ativos
-   - Notificações em áreas restritas
-   - Rastreamento de clientes durante o aluguel
+### Pré-requisitos
+- Conta na [Vercel](https://vercel.com)
+- Repositório no GitHub/GitLab
 
-5. **Marketplace Integrado**
-   - Aluguel de bikes, jet ski, lanchas e outros veículos
-   - Controle de requisitos legais (CNH Náutica, etc.)
-   - Sistema de categorias e filtros
+### Deploy Automático
+1. **Conecte seu repositório na Vercel**:
+   ```bash
+   # Via Vercel CLI (opcional)
+   npm i -g vercel
+   vercel
+   ```
 
-6. **Guia Turístico Digital**
-   - Localização de pontos turísticos
-   - Cálculo de melhor trajeto (custo vs tempo)
-   - Sugestões de modal mais barato e sustentável
+2. **Configure as variáveis de ambiente** (opcional para MVP):
+   ```bash
+   NEXT_PUBLIC_APP_URL=https://sua-app.vercel.app
+   NEXT_PUBLIC_APP_NAME="SX Locações"
+   ```
 
-7. **Check-in Social e Gamificação**
-   - Sistema de ranking e desafios
-   - Badges e conquistas
-   - Engajamento com pontos turísticos locais
+3. **Deploy automático**: O projeto está configurado para deploy automático!
 
-8. **Anfitrião Local Conectado**
-   - Chat seguro integrado
-   - Canal direto entre usuário e anfitrião
-   - Suporte local especializado
+### Configuração Personalizada
+O projeto já inclui:
+- ✅ `vercel.json` configurado
+- ✅ `next.config.js` otimizado
+- ✅ Headers de segurança
+- ✅ Redirects automáticos
+- ✅ Otimizações de build
+- ✅ Error boundaries
+- ✅ Páginas de erro personalizadas
 
-## 🛠 Tecnologias
+## 🏗️ Arquitetura Técnica
 
-- **Frontend**: Next.js 14, React 18, TypeScript
-- **Styling**: Tailwind CSS
-- **Database**: Supabase (PostgreSQL)
-- **PWA**: Service Worker, Web App Manifest
+### Stack Tecnológica
+- **Framework**: Next.js 15.4.1 (App Router)
+- **Frontend**: React 18.3.1 + TypeScript 5.8.3
+- **Styling**: Tailwind CSS 4.1.11
 - **Icons**: Lucide React
-- **Deployment**: Vercel Ready
+- **Estado**: localStorage (MVP) → Supabase (produção)
 
-## 🎨 Design System
+### Estrutura do Projeto
+```
+app-mvp-sx/
+├── app/                     # Pages (App Router)
+│   ├── admin/              # Dashboard administrativo
+│   ├── dashboard/          # Dashboard do usuário
+│   ├── error.tsx           # Página de erro global
+│   ├── loading.tsx         # Loading global
+│   └── not-found.tsx       # 404 personalizado
+├── components/             # Componentes React
+├── lib/                    # Utilitários e mock database
+├── scripts/               # Scripts de inicialização
+├── vercel.json            # Configuração Vercel
+└── next.config.js         # Configuração Next.js
+```
 
-### Cores da Marca
-- **Verde Principal**: #05a658
-- **Verde Claro**: #82c5a1
-- **Cinza**: #d1cfc2
-- **Preto**: #000000
+## 📊 Sistema de Gamificação
 
-### Fontes
-- **Principal**: Inter (Google Fonts)
-- **Fallback**: System UI, Sans-serif
+### Níveis e Pontos
+- **Bronze**: 0 pontos
+- **Silver**: 500 pontos  
+- **Gold**: 1.500 pontos
+- **Platinum**: 3.000 pontos
+- **Diamond**: 10.000 pontos
+
+### Ações que Geram Pontos
+- **Cadastro**: 100 pontos
+- **Check-in**: 50 pontos
+- **Aluguel**: 10 pontos
+- **Indicação**: 200 pontos
+- **Avaliação**: 25 pontos
+- **Streak Diário**: 30 pontos
+- **Conquista**: 100 pontos
+
+### Conquistas Disponíveis
+1. 🚲 **Primeiro Aluguel** (50 pts)
+2. 🗺️ **Explorador** - 5 check-ins diferentes (100 pts)
+3. 👥 **Social** - 3 indicações (150 pts)
+4. 🔥 **Streak Master** - 7 dias consecutivos (200 pts)
+5. 🌱 **Eco Warrior** - 20 aluguéis (250 pts)
+6. ⭐ **Avaliador Expert** - 10 avaliações (100 pts)
+7. 🦉 **Coruja Noturna** - Aluguel noturno (75 pts)
+8. 📅 **Guerreiro do Fim de Semana** - Aluguéis em fins de semana (180 pts)
+
+## 🧪 Testando a Aplicação
+
+### 1. Dados Mock
+Execute no console do browser:
+```javascript
+// O arquivo scripts/init-mock-data.js inicializa dados de teste
+// 5 usuários, conquistas, pontos turísticos, transações
+```
+
+### 2. Fluxos de Teste
+
+#### Usuário Final
+1. Acesse `/` - página inicial
+2. Clique "Alugar" → escolha entre registro/WhatsApp
+3. Registre-se → ganhe 100 pontos iniciais
+4. Acesse `/dashboard` → explore todas as funcionalidades
+
+#### Administrador
+1. Acesse `/admin/login` 
+2. Login: `admin` / Senha: `sx2024admin`
+3. Explore: dashboard, usuários, pontos, pontos turísticos
+
+### 3. Funcionalidades para Testar
+- ✅ Sistema de pontos completo
+- ✅ Mudança automática de níveis
+- ✅ Conquistas e recompensas
+- ✅ Leaderboard e ranking
+- ✅ Upload de imagens (Base64)
+- ✅ Filtros e busca
+- ✅ Ajuste manual de pontos
+- ✅ Interface responsiva
+
+## 🛡️ Segurança e Performance
+
+### Headers de Segurança
+- X-Content-Type-Options: nosniff
+- X-Frame-Options: DENY
+- X-XSS-Protection: 1; mode=block
+- Referrer-Policy: strict-origin-when-cross-origin
+
+### Otimizações
+- **Bundle**: ~146KB por página
+- **Images**: WebP/AVIF + lazy loading
+- **CSS**: Tailwind purging + optimization
+- **Caching**: Headers configurados
+- **Compression**: Gzip habilitado
 
 ## 📱 PWA Features
 
-- ✅ Service Worker para cache offline
-- ✅ Web App Manifest configurado
-- ✅ Instalação como app nativo
-- ✅ Ícones e splash screens
-- ✅ Shortcuts para funcionalidades principais
+- ✅ Manifest configurado
+- ✅ Service Worker (futuro)
+- ✅ Responsivo mobile-first
+- ✅ Offline-ready (localStorage)
 
-## 🔧 Instalação e Uso
+## 🔮 Roadmap de Produção
 
-### Pré-requisitos
-- Node.js 18+
-- npm ou yarn
+### Fase 1: MVP Atual ✅
+- Sistema mock completo
+- Interface responsiva
+- Gamificação robusta
+- Painel administrativo
 
-### Instalação
-```bash
-# Clone o repositório
-git clone <repository-url>
-cd app-mvp-sx
+### Fase 2: Backend Real
+- Migração para Supabase
+- API de pagamentos
+- Geolocalização real
+- Upload de arquivos
 
-# Instale as dependências
-npm install
-
-# Configure as variáveis de ambiente
-cp .env.local.example .env.local
-# Edite o arquivo .env.local com suas credenciais
-
-# Execute em modo de desenvolvimento
-npm run dev
-
-# Acesse http://localhost:3000
-```
-
-### Scripts Disponíveis
-```bash
-npm run dev      # Modo desenvolvimento
-npm run build    # Build para produção
-npm run start    # Servidor de produção
-npm run lint     # Linter ESLint
-```
-
-## 🔐 Configuração do Ambiente
-
-### Variáveis de Ambiente (.env.local)
-```env
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-
-# Google Maps (opcional)
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your-google-maps-key
-
-# Outros serviços...
-```
-
-## 🗄 Estrutura do Banco de Dados
-
-### Tabelas Principais
-- `users` - Usuários e perfis
-- `vehicles` - Veículos disponíveis
-- `rentals` - Aluguéis ativos e histórico
-- `contracts` - Contratos digitais
-- `documents` - Documentos de usuários
-- `achievements` - Sistema de gamificação
-- `tourist_attractions` - Pontos turísticos
-- `chat_messages` - Mensagens com anfitriões
-
-## 🚀 Deploy
-
-### Vercel (Recomendado)
-```bash
-# Instale a CLI da Vercel
-npm i -g vercel
-
-# Execute o deploy
-vercel
-
-# Configure as variáveis de ambiente no dashboard
-```
-
-### Outras Plataformas
-- Netlify
-- Railway
-- Heroku
-- AWS Amplify
-
-## 📊 Funcionalidades Mockadas
-
-Durante o desenvolvimento, as seguintes funcionalidades estão mockadas:
-
-- ✅ Autenticação de usuários
-- ✅ Upload de documentos
-- ✅ Geolocalização
-- ✅ Pagamentos
-- ✅ Notificações push
-- ✅ Chat em tempo real
-- ✅ Análise de documentos
-
-## 🔄 Próximos Passos
-
-### Para Produção
-1. Configurar Supabase com schema real
-2. Implementar autenticação real
-3. Integrar com gateway de pagamento
-4. Configurar mapas (Google Maps/OpenStreetMap)
-5. Implementar upload de arquivos (Cloudinary)
-6. Configurar notificações push
-7. Implementar chat em tempo real
-8. Adicionar analytics (Google Analytics)
-
-### Melhorias Futuras
-- Modo offline completo
-- Sincronização em background
-- Notificações push avançadas
-- Análise de comportamento do usuário
-- A/B testing
-- Multilinguagem
+### Fase 3: Recursos Avançados
+- Push notifications
+- WhatsApp Business API
+- Analytics avançado
+- Multi-idioma
 
 ## 🤝 Contribuição
 

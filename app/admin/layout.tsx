@@ -77,7 +77,7 @@ export default function AdminLayout({
   ]
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -87,7 +87,7 @@ export default function AdminLayout({
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-72 sm:w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
+      <div className={`admin-sidebar fixed inset-y-0 left-0 z-50 w-72 sm:w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:relative lg:flex lg:flex-col ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         <div className="flex items-center justify-between h-16 px-4 sm:px-6 border-b border-gray-200 safe-top">
@@ -142,9 +142,9 @@ export default function AdminLayout({
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className="admin-main-content flex-1 flex flex-col lg:pl-0">
         {/* Top bar */}
-        <header className="bg-white shadow-sm border-b border-gray-200 safe-top">
+        <header className="bg-white shadow-sm border-b border-gray-200 safe-top flex-shrink-0">
           <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
             <button
               onClick={() => setSidebarOpen(true)}
@@ -153,7 +153,7 @@ export default function AdminLayout({
               <Menu size={24} className="sm:w-5 sm:h-5" />
             </button>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 ml-auto">
               <span className="text-base sm:text-sm text-gray-500">
                 Logado como: <span className="font-medium text-gray-900">Admin</span>
               </span>
@@ -162,7 +162,7 @@ export default function AdminLayout({
         </header>
 
         {/* Page content */}
-        <main className="mobile-section safe-bottom">
+        <main className="mobile-section safe-bottom flex-1 overflow-auto">
           {children}
         </main>
       </div>
