@@ -68,7 +68,6 @@
     }
   ],
   "env": {
-    "NEXT_PUBLIC_APP_URL": "@sx-app-url",
     "NEXT_PUBLIC_APP_NAME": "SX Locações"
   }
 }
