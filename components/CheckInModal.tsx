@@ -87,7 +87,7 @@ export default function CheckInModal({ isOpen, onClose, touristSpot, onSuccess }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md">
+      <div className="bg-white rounded-2xl p-6 w-full">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900">Check-in</h2>

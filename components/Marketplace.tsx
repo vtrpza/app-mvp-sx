@@ -425,7 +425,7 @@ export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProp
                   <Search size={32} className="text-primary" aria-hidden="true" />
                 </div>
                 <h3 className="text-xl font-bold text-neutral-900 mb-2">Nenhum veículo encontrado</h3>
-                <p className="text-neutral-600 max-w-md leading-relaxed">
+                <p className="text-neutral-600 leading-relaxed">
                   Ajuste seus filtros ou tente uma busca diferente para encontrar o veículo perfeito
                 </p>
               </div>
