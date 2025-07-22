@@ -276,7 +276,7 @@ export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProp
           </aside>
 
           {/* Premium Vehicles Grid */}
-          <main className="lg:col-span-3 order-1 lg:order-2 animate-slide-up animate-stagger-2" role="main" aria-label="Lista de veículos">
+          <main className="lg:col-span-2 order-1 lg:order-2 animate-slide-up animate-stagger-2" role="main" aria-label="Lista de veículos">
             {isPending && (
               <div className="flex items-center justify-center py-12" role="status" aria-live="polite">
                 <div className="w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin" aria-label="Carregando veículos"></div>
