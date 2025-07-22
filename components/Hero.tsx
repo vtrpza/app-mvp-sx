@@ -185,7 +185,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
             </div>
 
             {/* Visual Side */}
-            <div className="relative animate-slide-up animate-stagger-2 px-4 lg:px-0 order-first lg:order-last w-full max-w-sm mx-auto lg:max-w-none lg:mx-0">
+            <div className="relative animate-slide-up animate-stagger-2 px-4 lg:px-0 order-first lg:order-last w-full mx-auto lg:max-w-none lg:mx-0">
               
               {/* Main Visual Container */}
               <div className="relative">
