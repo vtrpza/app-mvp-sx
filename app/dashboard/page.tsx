@@ -217,34 +217,45 @@ function DashboardContent() {
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
               <button
                 onClick={() => router.push('/')}
-                className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center hover:bg-primary/90 transition-colors"
+                className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center hover:bg-primary/90 transition-colors flex-shrink-0"
               >
                 <Star className="text-white" size={20} />
               </button>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Ponto X Dashboard</h1>
-                <p className="text-sm text-gray-600">Bem-vindo, {user?.name}!</p>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-lg sm:text-xl font-bold text-gray-900 truncate">Ponto X Dashboard</h1>
+                <p className="text-xs sm:text-sm text-gray-600 truncate">Bem-vindo, {user?.name}!</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-4">
-              <UserPointsDisplay 
-                points={user?.points || 0}
-                level={user?.level || 'Bronze'}
-                showDetails={true}
-              />
+            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+              <div className="hidden sm:block">
+                <UserPointsDisplay 
+                  points={user?.points || 0}
+                  level={user?.level || 'Bronze'}
+                  showDetails={true}
+                />
+              </div>
+              
+              {/* Mobile Points Display */}
+              <div className="sm:hidden">
+                <UserPointsDisplay 
+                  points={user?.points || 0}
+                  level={user?.level || 'Bronze'}
+                  showDetails={false}
+                />
+              </div>
               
               {/* User Menu */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   onClick={() => router.push('/')}
                   className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                   title="Voltar ao início"
                 >
-                  <Home size={20} />
+                  <Home size={18} className="sm:w-5 sm:h-5" />
                 </button>
                 
                 <button
@@ -252,7 +263,7 @@ function DashboardContent() {
                   className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                   title="Sair"
                 >
-                  <LogOut size={20} />
+                  <LogOut size={18} className="sm:w-5 sm:h-5" />
                 </button>
               </div>
             </div>
@@ -302,21 +313,21 @@ function DashboardContent() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex space-x-1 bg-gray-200 p-1 rounded-lg mb-6">
+        <div className="flex space-x-1 bg-gray-200 p-1 rounded-lg mb-6 overflow-x-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md text-sm font-medium transition-colors ${
+                className={`flex-shrink-0 flex items-center justify-center gap-1 sm:gap-2 py-2 sm:py-3 px-2 sm:px-4 rounded-md text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'bg-white text-primary shadow-sm'
                     : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
-                <Icon size={18} />
-                {tab.name}
+                <Icon size={16} className="sm:w-[18px] sm:h-[18px]" />
+                <span className="hidden xs:inline sm:inline">{tab.name}</span>
               </button>
             )
           })}
@@ -327,37 +338,37 @@ function DashboardContent() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Stats Cards */}
             <div className="lg:col-span-2 space-y-6">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-white rounded-xl p-4 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Flame className="text-orange-500" size={20} />
-                    <span className="text-2xl font-bold text-gray-900">{userStats.stats.currentStreak}</span>
+              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <Flame className="text-orange-500 flex-shrink-0" size={18} />
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900">{userStats.stats.currentStreak}</span>
                   </div>
-                  <div className="text-sm text-gray-600">Sequência Atual</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Sequência Atual</div>
                 </div>
                 
-                <div className="bg-white rounded-xl p-4 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-2">
-                    <MapPin className="text-blue-500" size={20} />
-                    <span className="text-2xl font-bold text-gray-900">{userStats.stats.totalCheckins}</span>
+                <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <MapPin className="text-blue-500 flex-shrink-0" size={18} />
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900">{userStats.stats.totalCheckins}</span>
                   </div>
-                  <div className="text-sm text-gray-600">Check-ins</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Check-ins</div>
                 </div>
                 
-                <div className="bg-white rounded-xl p-4 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Trophy className="text-yellow-500" size={20} />
-                    <span className="text-2xl font-bold text-gray-900">{userStats.stats.achievementsUnlocked}</span>
+                <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <Trophy className="text-yellow-500 flex-shrink-0" size={18} />
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900">{userStats.stats.achievementsUnlocked}</span>
                   </div>
-                  <div className="text-sm text-gray-600">Conquistas</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Conquistas</div>
                 </div>
                 
-                <div className="bg-white rounded-xl p-4 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-2">
-                    <TrendingUp className="text-green-500" size={20} />
-                    <span className="text-2xl font-bold text-gray-900">{userStats.stats.pointsThisWeek}</span>
+                <div className="bg-white rounded-xl p-3 sm:p-4 border border-gray-200">
+                  <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                    <TrendingUp className="text-green-500 flex-shrink-0" size={18} />
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900">{userStats.stats.pointsThisWeek}</span>
                   </div>
-                  <div className="text-sm text-gray-600">Esta Semana</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Esta Semana</div>
                 </div>
               </div>
 
