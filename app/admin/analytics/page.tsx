@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { 
   Users, 
   MapPin, 
@@ -81,11 +81,7 @@ export default function AdminAnalytics() {
     activity: true
   })
 
-  useEffect(() => {
-    loadAnalyticsData()
-  }, [dateRange])
-
-  const loadAnalyticsData = async () => {
+  const loadAnalyticsData = useCallback(async () => {
     setLoading(true)
     try {
       // Load all data sources
@@ -226,7 +222,11 @@ export default function AdminAnalytics() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [dateRange])
+
+  useEffect(() => {
+    loadAnalyticsData()
+  }, [loadAnalyticsData])
 
   const generateDailyData = (items: any[], dateField: string, start: Date, end: Date) => {
     const days = []

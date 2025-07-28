@@ -30,6 +30,168 @@ interface LeaderboardUser {
   achievements: number
 }
 
+// Memoized timeframes configuration
+const TIMEFRAMES = [
+  { id: 'all', name: 'Todo Tempo', icon: Trophy },
+  { id: 'week', name: 'Esta Semana', icon: Calendar },
+  { id: 'month', name: 'Este Mês', icon: Clock },
+  { id: 'year', name: 'Este Ano', icon: TrendingUp }
+] as const
+
+// Memoized user rank component
+const UserRankDisplay = memo(({ 
+  currentUserRank, 
+  currentUser 
+}: { 
+  currentUserRank?: number
+  currentUser: any 
+}) => {
+  if (!currentUserRank || !currentUser) return null
+
+  return (
+    <div className="mt-4 p-4 bg-white rounded-lg border-2 border-primary/20">
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 text-primary font-bold">
+          <Target size={20} />
+          <span>Sua Posição: #{currentUserRank}</span>
+        </div>
+        <div className="flex items-center gap-1 text-gray-600">
+          <Star size={16} className="text-yellow-500" />
+          <span>{currentUser?.points?.toLocaleString() || 0} pontos</span>
+        </div>
+      </div>
+    </div>
+  )
+})
+
+UserRankDisplay.displayName = 'UserRankDisplay'
+
+// Memoized podium component
+const PodiumDisplay = memo(({ 
+  leaderboard, 
+  getLevelColor, 
+  getLevelIcon 
+}: { 
+  leaderboard: LeaderboardUser[]
+  getLevelColor: (level: string) => string
+  getLevelIcon: (level: string) => string
+}) => {
+  if (leaderboard.length < 3) return null
+
+  return (
+    <div className="p-6 bg-gradient-to-br from-gray-50 to-blue-50 border-b border-gray-200">
+      <div className="flex justify-center items-end gap-8">
+        {/* 2nd Place */}
+        <PodiumPlace 
+          user={leaderboard[1]} 
+          position={2} 
+          getLevelColor={getLevelColor}
+          getLevelIcon={getLevelIcon}
+        />
+
+        {/* 1st Place */}
+        <PodiumPlace 
+          user={leaderboard[0]} 
+          position={1} 
+          getLevelColor={getLevelColor}
+          getLevelIcon={getLevelIcon}
+          isFirst
+        />
+
+        {/* 3rd Place */}
+        <PodiumPlace 
+          user={leaderboard[2]} 
+          position={3} 
+          getLevelColor={getLevelColor}
+          getLevelIcon={getLevelIcon}
+        />
+      </div>
+    </div>
+  )
+})
+
+PodiumDisplay.displayName = 'PodiumDisplay'
+
+// Memoized individual podium place
+const PodiumPlace = memo(({ 
+  user, 
+  position, 
+  getLevelColor, 
+  getLevelIcon, 
+  isFirst = false 
+}: {
+  user: LeaderboardUser
+  position: number
+  getLevelColor: (level: string) => string
+  getLevelIcon: (level: string) => string
+  isFirst?: boolean
+}) => {
+  const getPositionIcon = () => {
+    switch (position) {
+      case 1: return <Crown className="text-yellow-500" size={isFirst ? 24 : 20} />
+      case 2: return <Medal className="text-gray-500" size={20} />
+      case 3: return <Award className="text-orange-500" size={20} />
+      default: return null
+    }
+  }
+
+  const getPositionStyles = () => {
+    switch (position) {
+      case 1: return {
+        container: 'text-center transform scale-110',
+        avatar: 'w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-xl',
+        iconPos: 'absolute -top-3 -right-1',
+        badge: 'absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-white px-2 py-1 rounded-full text-xs font-bold',
+        name: 'font-bold text-lg text-gray-900',
+        points: 'text-lg font-bold text-primary mt-1'
+      }
+      case 2: return {
+        container: 'text-center',
+        avatar: 'w-16 h-16 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center text-white font-bold text-lg',
+        iconPos: 'absolute -top-2 -right-2',
+        name: 'font-semibold text-gray-900',
+        points: 'text-sm text-gray-600 mt-1'
+      }
+      case 3: return {
+        container: 'text-center',
+        avatar: 'w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg',
+        iconPos: 'absolute -top-2 -right-2',
+        name: 'font-semibold text-gray-900',
+        points: 'text-sm text-gray-600 mt-1'
+      }
+      default: return {}
+    }
+  }
+
+  const styles = getPositionStyles()
+
+  return (
+    <div className={styles.container}>
+      <div className="relative mb-3">
+        <div className={styles.avatar}>
+          {user.name.charAt(0)}
+        </div>
+        <div className={styles.iconPos}>
+          {getPositionIcon()}
+        </div>
+        {isFirst && (
+          <div className={styles.badge}>
+            👑 #1
+          </div>
+        )}
+      </div>
+      <div className={styles.name}>{user.name}</div>
+      <div className={`inline-flex items-center gap-1 px-${isFirst ? '3' : '2'} py-1 rounded-full text-${isFirst ? 'sm' : 'xs'} font-medium mt-1 ${getLevelColor(user.level)}`}>
+        <span>{getLevelIcon(user.level)}</span>
+        {user.level}
+      </div>
+      <div className={styles.points}>{user.points.toLocaleString()} pts</div>
+    </div>
+  )
+})
+
+PodiumPlace.displayName = 'PodiumPlace'
+
 export default function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState<LeaderboardUser[]>([])
   const [currentUser, setCurrentUser] = useState<any>(null)
@@ -37,63 +199,65 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true)
   const [showFilters, setShowFilters] = useState(false)
 
-  const timeframes = [
-    { id: 'all', name: 'Todo Tempo', icon: Trophy },
-    { id: 'week', name: 'Esta Semana', icon: Calendar },
-    { id: 'month', name: 'Este Mês', icon: Clock },
-    { id: 'year', name: 'Este Ano', icon: TrendingUp }
-  ]
+  // Memoized data loading function
+  const loadLeaderboard = useCallback(async () => {
+    try {
+      setLoading(true)
+      
+      // Try to get cached data first
+      const cacheKey = `leaderboard_${timeframe}`
+      const cachedData = PerformantStorage.get<{ leaderboard: LeaderboardUser[]; user: any }>(cacheKey, 30000) // 30 second cache
 
-  useEffect(() => {
-    const loadLeaderboard = async () => {
-      try {
-        setLoading(true)
-        
-        // Get current user
-        const user = JSON.parse(localStorage.getItem('sx_current_user') || 'null')
-        setCurrentUser(user)
-        
-        // Load leaderboard data
-        const data = await mockDatabase.gamification.getLeaderboard(timeframe, 50)
-        setLeaderboard(data)
-        
-      } catch (error) {
-        console.error('Error loading leaderboard:', error)
-      } finally {
+      if (cachedData) {
+        setLeaderboard(cachedData.leaderboard)
+        setCurrentUser(cachedData.user)
         setLoading(false)
+        return
       }
-    }
 
-    loadLeaderboard()
+      // Get current user
+      const user = JSON.parse(localStorage.getItem('sx_current_user') || 'null')
+      setCurrentUser(user)
+      
+      // Load leaderboard data with performance monitoring
+      const data = await PerfMonitor.measureAsync('leaderboard-load', async () => {
+        return await mockDatabase.gamification.getLeaderboard(timeframe, 50)
+      })
+      
+      setLeaderboard(data)
+      
+      // Cache the result
+      PerformantStorage.set(cacheKey, { leaderboard: data, user })
+      
+    } catch (error) {
+      console.error('Error loading leaderboard:', error)
+    } finally {
+      setLoading(false)
+    }
   }, [timeframe])
 
-  const getRankIcon = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return <Crown className="text-yellow-500" size={24} />
-      case 2:
-        return <Medal className="text-gray-500" size={24} />
-      case 3:
-        return <Award className="text-orange-500" size={24} />
-      default:
-        return <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">{rank}</div>
-    }
-  }
+  useEffect(() => {
+    loadLeaderboard()
+  }, [loadLeaderboard])
 
-  const getRankBadgeColor = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return 'bg-gradient-to-r from-yellow-400 to-yellow-600'
-      case 2:
-        return 'bg-gradient-to-r from-gray-300 to-gray-500'
-      case 3:
-        return 'bg-gradient-to-r from-orange-400 to-orange-600'
-      default:
-        return 'bg-gradient-to-r from-blue-400 to-blue-600'
+  // Memoized helper functions
+  const getRankIcon = useMemoizedCalculation(() => {
+    const rankIconFn = (rank: number) => {
+      switch (rank) {
+        case 1:
+          return <Crown className="text-yellow-500" size={24} />
+        case 2:
+          return <Medal className="text-gray-500" size={24} />
+        case 3:
+          return <Award className="text-orange-500" size={24} />
+        default:
+          return <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-bold">{rank}</div>
+      }
     }
-  }
+    return rankIconFn
+  }, [])
 
-  const getLevelColor = (level: string) => {
+  const getLevelColor = useMemoizedCalculation(() => (level: string) => {
     switch (level) {
       case 'Bronze': return 'text-orange-600 bg-orange-100'
       case 'Silver': return 'text-gray-600 bg-gray-100'
@@ -102,9 +266,9 @@ export default function Leaderboard() {
       case 'Diamond': return 'text-blue-600 bg-blue-100'
       default: return 'text-gray-600 bg-gray-100'
     }
-  }
+  }, [])
 
-  const getLevelIcon = (level: string) => {
+  const getLevelIcon = useMemoizedCalculation(() => (level: string) => {
     switch (level) {
       case 'Bronze': return '🥉'
       case 'Silver': return '🥈'
@@ -113,9 +277,13 @@ export default function Leaderboard() {
       case 'Diamond': return '💠'
       default: return '⭐'
     }
-  }
+  }, [])
 
-  const currentUserRank = leaderboard.find(u => u.userId === currentUser?.id)?.rank
+  // Memoized current user rank calculation
+  const currentUserRank = useMemo(() => 
+    leaderboard.find(u => u.userId === currentUser?.id)?.rank,
+    [leaderboard, currentUser?.id]
+  )
 
   if (loading) {
     return (
@@ -153,7 +321,7 @@ export default function Leaderboard() {
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <Filter size={16} />
-            <span className="font-medium">{timeframes.find(t => t.id === timeframe)?.name}</span>
+            <span className="font-medium">{TIMEFRAMES.find(t => t.id === timeframe)?.name}</span>
             <ChevronDown size={16} />
           </button>
         </div>
@@ -161,7 +329,7 @@ export default function Leaderboard() {
         {/* Filters */}
         {showFilters && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 p-4 bg-white rounded-lg border border-gray-200">
-            {timeframes.map((tf) => {
+            {TIMEFRAMES.map((tf) => {
               const Icon = tf.icon
               return (
                 <button
@@ -185,90 +353,23 @@ export default function Leaderboard() {
         )}
         
         {/* Current User Position */}
-        {currentUserRank && (
-          <div className="mt-4 p-4 bg-white rounded-lg border-2 border-primary/20">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-primary font-bold">
-                <Target size={20} />
-                <span>Sua Posição: #{currentUserRank}</span>
-              </div>
-              <div className="flex items-center gap-1 text-gray-600">
-                <Star size={16} className="text-yellow-500" />
-                <span>{currentUser?.points?.toLocaleString() || 0} pontos</span>
-              </div>
-            </div>
-          </div>
-        )}
+        <UserRankDisplay 
+          currentUserRank={currentUserRank}
+          currentUser={currentUser}
+        />
       </div>
 
       {/* Top 3 Podium */}
-      {leaderboard.length >= 3 && (
-        <div className="p-6 bg-gradient-to-br from-gray-50 to-blue-50 border-b border-gray-200">
-          <div className="flex justify-center items-end gap-8">
-            {/* 2nd Place */}
-            <div className="text-center">
-              <div className="relative mb-3">
-                <div className="w-16 h-16 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                  {leaderboard[1].name.charAt(0)}
-                </div>
-                <div className="absolute -top-2 -right-2">
-                  <Medal className="text-gray-500" size={20} />
-                </div>
-              </div>
-              <div className="font-semibold text-gray-900">{leaderboard[1].name}</div>
-              <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium mt-1 ${getLevelColor(leaderboard[1].level)}`}>
-                <span>{getLevelIcon(leaderboard[1].level)}</span>
-                {leaderboard[1].level}
-              </div>
-              <div className="text-sm text-gray-600 mt-1">{leaderboard[1].points.toLocaleString()} pts</div>
-            </div>
-
-            {/* 1st Place */}
-            <div className="text-center transform scale-110">
-              <div className="relative mb-3">
-                <div className="w-20 h-20 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                  {leaderboard[0].name.charAt(0)}
-                </div>
-                <div className="absolute -top-3 -right-1">
-                  <Crown className="text-yellow-500" size={24} />
-                </div>
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-yellow-400 text-white px-2 py-1 rounded-full text-xs font-bold">👑 #1</div>
-                </div>
-              </div>
-              <div className="font-bold text-lg text-gray-900">{leaderboard[0].name}</div>
-              <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium mt-1 ${getLevelColor(leaderboard[0].level)}`}>
-                <span>{getLevelIcon(leaderboard[0].level)}</span>
-                {leaderboard[0].level}
-              </div>
-              <div className="text-lg font-bold text-primary mt-1">{leaderboard[0].points.toLocaleString()} pts</div>
-            </div>
-
-            {/* 3rd Place */}
-            <div className="text-center">
-              <div className="relative mb-3">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                  {leaderboard[2].name.charAt(0)}
-                </div>
-                <div className="absolute -top-2 -right-2">
-                  <Award className="text-orange-500" size={20} />
-                </div>
-              </div>
-              <div className="font-semibold text-gray-900">{leaderboard[2].name}</div>
-              <div className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium mt-1 ${getLevelColor(leaderboard[2].level)}`}>
-                <span>{getLevelIcon(leaderboard[2].level)}</span>
-                {leaderboard[2].level}
-              </div>
-              <div className="text-sm text-gray-600 mt-1">{leaderboard[2].points.toLocaleString()} pts</div>
-            </div>
-          </div>
-        </div>
-      )}
+      <PodiumDisplay 
+        leaderboard={leaderboard}
+        getLevelColor={getLevelColor}
+        getLevelIcon={getLevelIcon}
+      />
 
       {/* Full Leaderboard */}
       <div className="p-6">
         <div className="space-y-2">
-          {leaderboard.map((user, index) => (
+          {leaderboard.map((user) => (
             <div key={user.userId} className={`flex items-center gap-4 p-4 rounded-lg transition-all hover:bg-gray-50 ${
               user.userId === currentUser?.id 
                 ? 'bg-primary/5 border-2 border-primary/20 ring-2 ring-primary/10' 
@@ -314,7 +415,7 @@ export default function Leaderboard() {
                   {user.points.toLocaleString()}
                 </div>
                 <div className="text-sm text-gray-500">
-                  {timeframe === 'all' ? 'pontos totais' : `pts ${timeframes.find(t => t.id === timeframe)?.name.toLowerCase()}`}
+                  {timeframe === 'all' ? 'pontos totais' : `pts ${TIMEFRAMES.find(t => t.id === timeframe)?.name.toLowerCase()}`}
                 </div>
               </div>
             </div>
@@ -344,7 +445,7 @@ export default function Leaderboard() {
             </span>
           </div>
           <div className="text-xs">
-            Período: {timeframes.find(t => t.id === timeframe)?.name}
+            Período: {TIMEFRAMES.find(t => t.id === timeframe)?.name}
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 // Performance utilities for optimizing React components and data operations
 
-import { useCallback, useRef, useMemo } from 'react'
+import React, { useCallback, useRef, useMemo, ComponentType } from 'react'
 
 // Debounce hook for search and filtering
 export function useDebounce<T extends (...args: any[]) => any>(
@@ -276,14 +276,18 @@ export function useIntersectionObserver(
 
 // Component performance profiling
 export function withPerformanceProfiler<P extends {}>(
-  Component: React.ComponentType<P>,
+  WrappedComponent: ComponentType<P>,
   componentName: string
 ) {
-  return React.memo((props: P) => {
-    return PerfMonitor.measure(`${componentName} render`, () => (
-      <Component {...props} />
-    ))
+  const ProfiledComponent = React.memo((props: P) => {
+    return PerfMonitor.measure(`${componentName} render`, () => {
+      return React.createElement(WrappedComponent, props)
+    })
   })
+  
+  ProfiledComponent.displayName = `withPerformanceProfiler(${componentName})`
+  
+  return ProfiledComponent
 }
 
 // Memory leak prevention utilities

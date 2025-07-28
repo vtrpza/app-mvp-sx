@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, memo, useMemo, useRef } from 'react'
 import { 
   X, 
   CheckCircle, 
