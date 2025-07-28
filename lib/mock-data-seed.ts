@@ -133,6 +133,40 @@ export const seedMockData = () => {
     console.log('✅ Points configuration seeded successfully')
   }
 
+  // Initialize empty referrals array if not exists
+  const existingReferrals = localStorage.getItem('sx_referrals')
+  if (!existingReferrals) {
+    localStorage.setItem('sx_referrals', JSON.stringify([]))
+    console.log('✅ Referrals storage initialized')
+  }
+
+  // Update existing users with referral codes if they don't have them
+  const users = JSON.parse(localStorage.getItem('sx_users') || '[]')
+  let usersUpdated = false
+  
+  users.forEach((user: any) => {
+    if (!user.referralCode) {
+      const name = user.name || 'User'
+      const namePrefix = name
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Remove accents
+        .replace(/[^a-zA-Z]/g, '') // Remove non-letters
+        .toUpperCase()
+        .substring(0, 3)
+      
+      const userSuffix = user.id.substring(0, 4).toUpperCase()
+      const randomSuffix = Math.random().toString(36).substring(2, 5).toUpperCase()
+      
+      user.referralCode = `${namePrefix}${userSuffix}${randomSuffix}`
+      usersUpdated = true
+    }
+  })
+
+  if (usersUpdated) {
+    localStorage.setItem('sx_users', JSON.stringify(users))
+    console.log('✅ Updated existing users with referral codes')
+  }
+
   console.log('🚀 Mock data initialization complete')
 }
 

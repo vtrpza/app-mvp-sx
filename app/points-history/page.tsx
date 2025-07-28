@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   Star, 
@@ -38,18 +38,7 @@ function PointsHistoryContent() {
   const [timeFilter, setTimeFilter] = useState('all')
   const [stats, setStats] = useState<any>(null)
 
-  useEffect(() => {
-    if (user) {
-      loadTransactions()
-      loadStats()
-    }
-  }, [user])
-
-  useEffect(() => {
-    filterTransactions()
-  }, [transactions, filterReason, timeFilter])
-
-  const loadTransactions = async () => {
+  const loadTransactions = useCallback(async () => {
     if (!user) return
 
     try {
@@ -60,9 +49,9 @@ function PointsHistoryContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
-  const loadStats = async () => {
+  const loadStats = useCallback(async () => {
     if (!user) return
 
     try {
@@ -71,9 +60,9 @@ function PointsHistoryContent() {
     } catch (error) {
       console.error('Error loading stats:', error)
     }
-  }
+  }, [user])
 
-  const filterTransactions = () => {
+  const filterTransactions = useCallback(() => {
     let filtered = transactions
 
     // Filter by reason
@@ -104,7 +93,18 @@ function PointsHistoryContent() {
     }
 
     setFilteredTransactions(filtered)
-  }
+  }, [transactions, filterReason, timeFilter])
+
+  useEffect(() => {
+    if (user) {
+      loadTransactions()
+      loadStats()
+    }
+  }, [user, loadTransactions, loadStats])
+
+  useEffect(() => {
+    filterTransactions()
+  }, [transactions, filterReason, timeFilter, filterTransactions])
 
   const getReasonIcon = (reason: string) => {
     switch (reason) {

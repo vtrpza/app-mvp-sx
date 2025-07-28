@@ -38,7 +38,7 @@ export default function Hero({ stats = defaultStats }: HeroProps) {
       setCurrentWord((prev) => (prev + 1) % words.length)
     }, 3000)
     return () => clearInterval(interval)
-  }, [])
+  }, [words.length])
   
   const playVideo = useCallback(() => setIsVideoPlaying(true), [])
   

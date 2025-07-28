@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { 
   MapPin, 
@@ -15,6 +15,7 @@ import {
   Search,
   Filter
 } from 'lucide-react'
+import Image from 'next/image'
 import { mockDatabase } from '@/lib/supabase'
 import AuthGuard, { useAuth } from '@/components/AuthGuard'
 import CheckInModal from '@/components/CheckInModal'
@@ -50,16 +51,7 @@ function TouristSpotsContent() {
   })
   const [checkedInSpots, setCheckedInSpots] = useState<Set<string>>(new Set())
 
-  useEffect(() => {
-    loadTouristSpots()
-    checkTodayCheckins()
-  }, [])
-
-  useEffect(() => {
-    filterSpots()
-  }, [spots, searchTerm, selectedType])
-
-  const loadTouristSpots = async () => {
+  const loadTouristSpots = useCallback(async () => {
     try {
       const spotsData = await mockDatabase.touristSpots.getAll()
       setSpots(spotsData)
@@ -69,9 +61,9 @@ function TouristSpotsContent() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
-  const checkTodayCheckins = () => {
+  const checkTodayCheckins = useCallback(() => {
     if (!user) return
 
     const checkins = JSON.parse(localStorage.getItem('sx_checkins') || '[]')
@@ -83,9 +75,9 @@ function TouristSpotsContent() {
     
     const checkedInSpotIds = new Set<string>(todayCheckins.map((c: any) => c.locationId))
     setCheckedInSpots(checkedInSpotIds)
-  }
+  }, [user])
 
-  const filterSpots = () => {
+  const filterSpots = useCallback(() => {
     let filtered = spots
 
     // Filter by search term
@@ -102,7 +94,16 @@ function TouristSpotsContent() {
     }
 
     setFilteredSpots(filtered)
-  }
+  }, [spots, searchTerm, selectedType])
+
+  useEffect(() => {
+    loadTouristSpots()
+    checkTodayCheckins()
+  }, [loadTouristSpots, checkTodayCheckins])
+
+  useEffect(() => {
+    filterSpots()
+  }, [spots, searchTerm, selectedType, filterSpots])
 
   const handleCheckIn = (spot: TouristSpot) => {
     setCheckinModal({ isOpen: true, spot })
@@ -256,10 +257,13 @@ function TouristSpotsContent() {
                   {/* Image */}
                   {spot.image && (
                     <div className="relative h-48 bg-gray-200">
-                      <img 
+                      <Image 
                         src={spot.image} 
                         alt={spot.name}
+                        width={400}
+                        height={192}
                         className="w-full h-full object-cover"
+                        unoptimized={spot.image.startsWith('data:')}
                       />
                       {hasCheckedInToday && (
                         <div className="absolute top-3 right-3 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">

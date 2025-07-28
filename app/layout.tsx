@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import type { ReactNode } from 'react'
 import PerformanceOptimizer from '@/components/PerformanceOptimizer'
 import ClientInitializer from '@/components/ClientInitializer'
+import { NotificationProvider } from '@/components/NotificationProvider'
 import './globals.css'
 
 const inter = Inter({ 
@@ -86,11 +87,13 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans`}>
         <PerformanceOptimizer />
         <ClientInitializer />
-        <div id="root">
-          {children}
-        </div>
-        <div id="modal-root"></div>
-        <div id="toast-root"></div>
+        <NotificationProvider>
+          <div id="root">
+            {children}
+          </div>
+          <div id="modal-root"></div>
+          <div id="toast-root"></div>
+        </NotificationProvider>
       </body>
     </html>
   )

@@ -49,10 +49,10 @@ export default function RentalChoiceModal({
           <div className="mobile-flex-col gap-4">
             <div className="w-20 h-20 sm:w-16 sm:h-16 bg-primary/20 rounded-xl flex items-center justify-center mx-auto sm:mx-0">
               <span className="text-3xl sm:text-2xl">
-                {vehicle.type === 'bike' ? '🚴' : 
-                 vehicle.type === 'scooter' ? '🛴' : 
-                 vehicle.type === 'jetski' ? '🏄' : 
-                 vehicle.type === 'boat' ? '⛵' : '🚗'}
+                {vehicle.category === 'bikes' ? '🚴' : 
+                 vehicle.category === 'scooter' ? '🛴' : 
+                 vehicle.category === 'jetski' ? '🏄' : 
+                 vehicle.category === 'boats' ? '⛵' : '🚗'}
               </span>
             </div>
             <div className="text-center sm:text-left">

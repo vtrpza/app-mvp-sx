@@ -12,7 +12,25 @@ export const mockDatabase = {
     async create(userData: any) {
       // Mock user creation
       console.log('Mock: Creating user', userData)
-      return { id: Math.random().toString(36), ...userData }
+      const userId = Math.random().toString(36)
+      
+      // Generate referral code if not provided
+      if (!userData.referralCode) {
+        const name = userData.name || 'User'
+        const namePrefix = name
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '') // Remove accents
+          .replace(/[^a-zA-Z]/g, '') // Remove non-letters
+          .toUpperCase()
+          .substring(0, 3)
+        
+        const userSuffix = userId.substring(0, 4).toUpperCase()
+        const randomSuffix = Math.random().toString(36).substring(2, 5).toUpperCase()
+        
+        userData.referralCode = `${namePrefix}${userSuffix}${randomSuffix}`
+      }
+      
+      return { id: userId, ...userData }
     },
     
     async authenticate(email: string, password: string) {
@@ -462,14 +480,194 @@ export const mockDatabase = {
       if (!user) return []
 
       const rewards = [
-        { id: 'discount_5', name: '5% Desconto', description: 'Desconto em próximo aluguel', cost: 100, type: 'discount' },
-        { id: 'discount_10', name: '10% Desconto', description: 'Desconto em próximo aluguel', cost: 200, type: 'discount' },
-        { id: 'free_30min', name: '30min Grátis', description: 'Tempo livre de aluguel', cost: 150, type: 'time' },
-        { id: 'premium_access', name: 'Acesso Premium', description: 'Veículos premium por 1 dia', cost: 300, type: 'access' },
-        { id: 'vip_support', name: 'Suporte VIP', description: 'Atendimento prioritário por 1 mês', cost: 500, type: 'support' }
+        { 
+          id: 'discount_5', 
+          name: '5% Desconto', 
+          description: 'Desconto de 5% em seu próximo aluguel de veículo', 
+          cost: 100, 
+          type: 'discount', 
+          category: 'desconto',
+          expiresInDays: 30,
+          instructions: 'Apresente este código no momento do aluguel. Válido apenas uma vez.'
+        },
+        { 
+          id: 'discount_10', 
+          name: '10% Desconto', 
+          description: 'Desconto de 10% em seu próximo aluguel de veículo', 
+          cost: 200, 
+          type: 'discount', 
+          category: 'desconto',
+          expiresInDays: 30,
+          instructions: 'Apresente este código no momento do aluguel. Válido apenas uma vez.'
+        },
+        { 
+          id: 'discount_15', 
+          name: '15% Desconto', 
+          description: 'Desconto de 15% em seu próximo aluguel de veículo', 
+          cost: 350, 
+          type: 'discount', 
+          category: 'desconto',
+          expiresInDays: 30,
+          instructions: 'Apresente este código no momento do aluguel. Válido apenas uma vez.'
+        },
+        { 
+          id: 'free_30min', 
+          name: '30min Grátis', 
+          description: '30 minutos gratuitos de tempo de aluguel', 
+          cost: 150, 
+          type: 'time', 
+          category: 'tempo',
+          expiresInDays: 60,
+          instructions: 'Tempo será automaticamente creditado em sua próxima locação.'
+        },
+        { 
+          id: 'free_1hour', 
+          name: '1 Hora Grátis', 
+          description: '1 hora gratuita de tempo de aluguel', 
+          cost: 300, 
+          type: 'time', 
+          category: 'tempo',
+          expiresInDays: 60,
+          instructions: 'Tempo será automaticamente creditado em sua próxima locação.'
+        },
+        { 
+          id: 'premium_access', 
+          name: 'Acesso Premium', 
+          description: 'Acesso a veículos premium por 1 dia', 
+          cost: 300, 
+          type: 'access', 
+          category: 'acesso',
+          expiresInDays: 7,
+          instructions: 'Acesso liberado por 24 horas a partir da ativação.'
+        },
+        { 
+          id: 'premium_access_week', 
+          name: 'Acesso Premium - Semana', 
+          description: 'Acesso a veículos premium por 1 semana', 
+          cost: 800, 
+          type: 'access', 
+          category: 'acesso',
+          expiresInDays: 14,
+          instructions: 'Acesso liberado por 7 dias a partir da ativação.'
+        },
+        { 
+          id: 'vip_support', 
+          name: 'Suporte VIP', 
+          description: 'Atendimento prioritário por 1 mês', 
+          cost: 500, 
+          type: 'support', 
+          category: 'suporte',
+          expiresInDays: 3,
+          instructions: 'Entre em contato informando seu código VIP para atendimento prioritário.'
+        },
+        { 
+          id: 'priority_booking', 
+          name: 'Reserva Prioritária', 
+          description: 'Prioridade na reserva de veículos por 1 mês', 
+          cost: 400, 
+          type: 'support', 
+          category: 'suporte',
+          expiresInDays: 3,
+          instructions: 'Sua reserva terá prioridade sobre outros usuários do mesmo nível.'
+        }
       ]
 
       return rewards.filter(r => user.points >= r.cost)
+    },
+
+    async getAllRewards() {
+      return [
+        { 
+          id: 'discount_5', 
+          name: '5% Desconto', 
+          description: 'Desconto de 5% em seu próximo aluguel de veículo', 
+          cost: 100, 
+          type: 'discount', 
+          category: 'desconto',
+          expiresInDays: 30,
+          instructions: 'Apresente este código no momento do aluguel. Válido apenas uma vez.'
+        },
+        { 
+          id: 'discount_10', 
+          name: '10% Desconto', 
+          description: 'Desconto de 10% em seu próximo aluguel de veículo', 
+          cost: 200, 
+          type: 'discount', 
+          category: 'desconto',
+          expiresInDays: 30,
+          instructions: 'Apresente este código no momento do aluguel. Válido apenas uma vez.'
+        },
+        { 
+          id: 'discount_15', 
+          name: '15% Desconto', 
+          description: 'Desconto de 15% em seu próximo aluguel de veículo', 
+          cost: 350, 
+          type: 'discount', 
+          category: 'desconto',
+          expiresInDays: 30,
+          instructions: 'Apresente este código no momento do aluguel. Válido apenas uma vez.'
+        },
+        { 
+          id: 'free_30min', 
+          name: '30min Grátis', 
+          description: '30 minutos gratuitos de tempo de aluguel', 
+          cost: 150, 
+          type: 'time', 
+          category: 'tempo',
+          expiresInDays: 60,
+          instructions: 'Tempo será automaticamente creditado em sua próxima locação.'
+        },
+        { 
+          id: 'free_1hour', 
+          name: '1 Hora Grátis', 
+          description: '1 hora gratuita de tempo de aluguel', 
+          cost: 300, 
+          type: 'time', 
+          category: 'tempo',
+          expiresInDays: 60,
+          instructions: 'Tempo será automaticamente creditado em sua próxima locação.'
+        },
+        { 
+          id: 'premium_access', 
+          name: 'Acesso Premium', 
+          description: 'Acesso a veículos premium por 1 dia', 
+          cost: 300, 
+          type: 'access', 
+          category: 'acesso',
+          expiresInDays: 7,
+          instructions: 'Acesso liberado por 24 horas a partir da ativação.'
+        },
+        { 
+          id: 'premium_access_week', 
+          name: 'Acesso Premium - Semana', 
+          description: 'Acesso a veículos premium por 1 semana', 
+          cost: 800, 
+          type: 'access', 
+          category: 'acesso',
+          expiresInDays: 14,
+          instructions: 'Acesso liberado por 7 dias a partir da ativação.'
+        },
+        { 
+          id: 'vip_support', 
+          name: 'Suporte VIP', 
+          description: 'Atendimento prioritário por 1 mês', 
+          cost: 500, 
+          type: 'support', 
+          category: 'suporte',
+          expiresInDays: 3,
+          instructions: 'Entre em contato informando seu código VIP para atendimento prioritário.'
+        },
+        { 
+          id: 'priority_booking', 
+          name: 'Reserva Prioritária', 
+          description: 'Prioridade na reserva de veículos por 1 mês', 
+          cost: 400, 
+          type: 'support', 
+          category: 'suporte',
+          expiresInDays: 3,
+          instructions: 'Sua reserva terá prioridade sobre outros usuários do mesmo nível.'
+        }
+      ]
     },
 
     async redeemReward(userId: string, rewardId: string) {
@@ -482,6 +680,17 @@ export const mockDatabase = {
       // Deduct points
       await this.addPoints(userId, -reward.cost, 'redemption', `Resgate: ${reward.name}`)
       
+      // Generate redemption code
+      const generateRedemptionCode = (rewardId: string): string => {
+        const prefix = rewardId.toUpperCase().substring(0, 3)
+        const suffix = Math.random().toString(36).substring(2, 8).toUpperCase()
+        return `${prefix}${suffix}`
+      }
+      
+      // Calculate expiration date
+      const redeemedAt = new Date()
+      const expiresAt = new Date(redeemedAt.getTime() + (reward.expiresInDays || 30) * 24 * 60 * 60 * 1000)
+      
       // Save redemption
       const redemptions = JSON.parse(localStorage.getItem('sx_redemptions') || '[]')
       const redemption = {
@@ -489,14 +698,93 @@ export const mockDatabase = {
         userId,
         rewardId: reward.id,
         rewardName: reward.name,
+        rewardType: reward.type,
+        rewardCategory: reward.category,
         cost: reward.cost,
-        redeemedAt: new Date().toISOString(),
-        status: 'active'
+        redeemedAt: redeemedAt.toISOString(),
+        expiresAt: expiresAt.toISOString(),
+        status: 'active',
+        code: generateRedemptionCode(reward.id),
+        instructions: reward.instructions || ''
       }
       redemptions.push(redemption)
       localStorage.setItem('sx_redemptions', JSON.stringify(redemptions))
       
       return { success: true, redemption }
+    },
+
+    async getUserRedemptions(userId: string) {
+      const redemptions = JSON.parse(localStorage.getItem('sx_redemptions') || '[]')
+      return redemptions
+        .filter((r: any) => r.userId === userId)
+        .map((r: any) => ({
+          ...r,
+          status: this.getRedemptionStatus(r)
+        }))
+        .sort((a: any, b: any) => new Date(b.redeemedAt).getTime() - new Date(a.redeemedAt).getTime())
+    },
+
+    getRedemptionStatus(redemption: any): 'active' | 'used' | 'expired' {
+      if (redemption.status === 'used') return 'used'
+      
+      const expiryDate = new Date(redemption.expiresAt || redemption.redeemedAt)
+      if (redemption.expiresAt) {
+        // Use the stored expiry date
+      } else {
+        // Fallback: add 30 days to redemption date
+        expiryDate.setDate(expiryDate.getDate() + 30)
+      }
+      
+      if (new Date() > expiryDate) {
+        return 'expired'
+      }
+      
+      return 'active'
+    },
+
+    async markRewardAsUsed(redemptionId: string) {
+      const redemptions = JSON.parse(localStorage.getItem('sx_redemptions') || '[]')
+      const redemptionIndex = redemptions.findIndex((r: any) => r.id === redemptionId)
+      
+      if (redemptionIndex === -1) {
+        return { success: false, error: 'Redemption not found' }
+      }
+      
+      redemptions[redemptionIndex].status = 'used'
+      redemptions[redemptionIndex].usedAt = new Date().toISOString()
+      localStorage.setItem('sx_redemptions', JSON.stringify(redemptions))
+      
+      return { success: true }
+    },
+
+    async getRedemptionStats(userId: string) {
+      const redemptions = await this.getUserRedemptions(userId)
+      const now = new Date()
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+      
+      return {
+        total: redemptions.length,
+        active: redemptions.filter((r: any) => r.status === 'active').length,
+        used: redemptions.filter((r: any) => r.status === 'used').length,
+        expired: redemptions.filter((r: any) => r.status === 'expired').length,
+        thisMonth: redemptions.filter((r: any) => new Date(r.redeemedAt) >= thirtyDaysAgo).length,
+        totalPointsSpent: redemptions.reduce((sum: number, r: any) => sum + r.cost, 0),
+        mostRedeemedCategory: this.getMostRedeemedCategory(redemptions)
+      }
+    },
+
+    getMostRedeemedCategory(redemptions: any[]) {
+      const categoryCount = redemptions.reduce((acc: any, redemption: any) => {
+        const category = redemption.rewardCategory || 'other'
+        acc[category] = (acc[category] || 0) + 1
+        return acc
+      }, {})
+      
+      const maxCategory = Object.keys(categoryCount).reduce((a, b) => 
+        categoryCount[a] > categoryCount[b] ? a : b, 'none'
+      )
+      
+      return maxCategory === 'none' ? null : maxCategory
     }
   },
 

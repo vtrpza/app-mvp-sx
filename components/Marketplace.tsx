@@ -33,6 +33,7 @@ const validateVehicleData = (vehicle: any): boolean => {
 
 interface MarketplaceProps {
   vehicles?: typeof mockVehicles
+  referralCode?: string
 }
 
 const categories = [
@@ -97,7 +98,7 @@ const mockVehicles = [
   }
 ]
 
-export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProps) {
+export default function Marketplace({ vehicles = mockVehicles, referralCode }: MarketplaceProps) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -446,6 +447,7 @@ export default function Marketplace({ vehicles = mockVehicles }: MarketplaceProp
           isOpen={showRegisterModal}
           onClose={() => setShowRegisterModal(false)}
           onSuccess={handleRegistrationSuccess}
+          defaultReferralCode={referralCode}
         />
       </div>
     </section>

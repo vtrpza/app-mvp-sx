@@ -1,28 +1,53 @@
 'use client'
 
-import { useState } from 'react'
-import { X, Star, Gift, Check, AlertCircle } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { X, Star, Gift, Check, AlertCircle, Users } from 'lucide-react'
 import { mockDatabase } from '@/lib/supabase'
+import { useNotificationContext } from './NotificationProvider'
+import { 
+  generateReferralCode, 
+  getUserByReferralCode, 
+  createReferral, 
+  awardReferralPoints,
+  isValidReferralCode 
+} from '@/lib/referral-utils'
 
 interface QuickRegisterModalProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: (user: any) => void
+  defaultReferralCode?: string
 }
 
 export default function QuickRegisterModal({
   isOpen,
   onClose,
-  onSuccess
+  onSuccess,
+  defaultReferralCode
 }: QuickRegisterModalProps) {
+  const notifications = useNotificationContext()
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
+    referralCode: '',
     acceptTerms: false
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [referrerName, setReferrerName] = useState<string>('')
+
+  // Set default referral code if provided
+  useEffect(() => {
+    if (defaultReferralCode && isOpen) {
+      setFormData(prev => ({ ...prev, referralCode: defaultReferralCode }))
+      // Validate and get referrer name
+      const referrer = getUserByReferralCode(defaultReferralCode)
+      if (referrer) {
+        setReferrerName(referrer.name)
+      }
+    }
+  }, [defaultReferralCode, isOpen])
 
   if (!isOpen) return null
 
@@ -49,6 +74,13 @@ export default function QuickRegisterModal({
       newErrors.acceptTerms = 'É necessário aceitar os termos'
     }
 
+    // Validate referral code if provided
+    if (formData.referralCode && !isValidReferralCode(formData.referralCode)) {
+      newErrors.referralCode = 'Código de indicação inválido'
+    } else if (formData.referralCode && !getUserByReferralCode(formData.referralCode)) {
+      newErrors.referralCode = 'Código não encontrado'
+    }
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -73,10 +105,15 @@ export default function QuickRegisterModal({
       // Simular delay de API
       await new Promise(resolve => setTimeout(resolve, 1000))
 
+      // Generate referral code for new user
+      const userReferralCode = generateReferralCode(Math.random().toString(36), formData.name)
+      
       const newUser = await mockDatabase.users.create({
         ...formData,
         points: 100, // Pontos de boas-vindas
         level: 'Bronze',
+        referralCode: userReferralCode,
+        referredBy: formData.referralCode || undefined,
         createdAt: new Date().toISOString()
       })
 
@@ -86,10 +123,56 @@ export default function QuickRegisterModal({
       localStorage.setItem('sx_users', JSON.stringify(users))
       localStorage.setItem('sx_current_user', JSON.stringify(newUser))
 
+      // Adicionar transação de pontos de boas-vindas
+      const transactions = JSON.parse(localStorage.getItem('sx_points_transactions') || '[]')
+      transactions.push({
+        id: Math.random().toString(36),
+        userId: newUser.id,
+        points: 100,
+        reason: 'register',
+        description: 'Bônus de cadastro',
+        timestamp: new Date().toISOString()
+      })
+      localStorage.setItem('sx_points_transactions', JSON.stringify(transactions))
+
+      // Handle referral if provided
+      if (formData.referralCode) {
+        const referrer = getUserByReferralCode(formData.referralCode)
+        if (referrer) {
+          // Create referral relationship
+          createReferral(referrer.id, newUser.id)
+          
+          // Award points to referrer
+          awardReferralPoints(referrer.id, 200)
+          
+          // Show referral success notification
+          notifications.showSuccess(
+            'Indicação válida!',
+            `${referrer.name} ganhou 200 pontos por sua indicação!`
+          )
+        }
+      }
+
+      // Mostrar notificações de sucesso
+      notifications.showSuccess(
+        'Cadastro realizado!',
+        `Bem-vindo ao Ponto X, ${newUser.name}!`
+      )
+      
+      notifications.showPointsEarned(
+        100,
+        'Bônus de cadastro recebido',
+        100
+      )
+
       onSuccess(newUser)
       onClose()
     } catch (error) {
       console.error('Erro no cadastro:', error)
+      notifications.showError(
+        'Erro no cadastro',
+        'Ocorreu um erro ao criar sua conta. Tente novamente.'
+      )
     } finally {
       setIsSubmitting(false)
     }
@@ -210,6 +293,51 @@ export default function QuickRegisterModal({
                 {errors.email}
               </p>
             )}
+          </div>
+
+          {/* Referral Code */}
+          <div>
+            <label htmlFor="referralCode" className="block text-base sm:text-sm font-medium text-gray-700 mb-2">
+              Código de Indicação (opcional)
+            </label>
+            <input
+              type="text"
+              id="referralCode"
+              value={formData.referralCode}
+              onChange={(e) => {
+                const code = e.target.value.toUpperCase()
+                setFormData(prev => ({ ...prev, referralCode: code }))
+                
+                // Check if referrer exists
+                if (code && isValidReferralCode(code)) {
+                  const referrer = getUserByReferralCode(code)
+                  setReferrerName(referrer ? referrer.name : '')
+                } else {
+                  setReferrerName('')
+                }
+              }}
+              className={`mobile-input border focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                errors.referralCode ? 'border-red-500' : 
+                referrerName ? 'border-green-500' : 'border-gray-300'
+              }`}
+              placeholder="Ex: JOAO1234ABC"
+              maxLength={12}
+            />
+            {referrerName && (
+              <p className="text-green-600 text-sm sm:text-xs mt-2 sm:mt-1 flex items-center gap-2 sm:gap-1">
+                <Users size={16} />
+                Indicado por {referrerName} - Vocês ganharão pontos extras!
+              </p>
+            )}
+            {errors.referralCode && (
+              <p className="text-red-500 text-sm sm:text-xs mt-2 sm:mt-1 flex items-center gap-2 sm:gap-1">
+                <AlertCircle size={16} />
+                {errors.referralCode}
+              </p>
+            )}
+            <p className="text-gray-500 text-sm sm:text-xs mt-2 sm:mt-1">
+              Se alguém te indicou, digite o código aqui para ganharem pontos extras!
+            </p>
           </div>
 
           {/* Terms */}

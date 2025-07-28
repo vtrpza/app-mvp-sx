@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react'
 import { Upload, X, Image as ImageIcon } from 'lucide-react'
+import Image from 'next/image'
 
 interface ImageUploaderProps {
   onImageSelect: (imageData: string) => void
@@ -81,10 +82,13 @@ export default function ImageUploader({ onImageSelect, currentImage, className =
       {preview ? (
         <div className="relative">
           <div className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-300">
-            <img
+            <Image
               src={preview}
               alt="Preview"
+              width={400}
+              height={192}
               className="w-full h-full object-cover"
+              unoptimized={preview.startsWith('data:')}
             />
             <button
               type="button"

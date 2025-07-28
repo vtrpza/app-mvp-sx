@@ -176,17 +176,17 @@ export default function AdminUsers() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
         {['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].map(level => {
           const count = users.filter(u => u.level === level).length
           return (
-            <div key={level} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">{level}</p>
-                  <p className="text-xl font-bold text-gray-900">{count}</p>
+            <div key={level} className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 sm:p-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div className="text-center sm:text-left">
+                  <p className="text-xs sm:text-sm font-medium text-gray-600">{level}</p>
+                  <p className="text-lg sm:text-xl font-bold text-gray-900">{count}</p>
                 </div>
-                <span className="text-2xl">{getLevelIcon(level)}</span>
+                <span className="text-xl sm:text-2xl mx-auto sm:mx-0 mt-1 sm:mt-0">{getLevelIcon(level)}</span>
               </div>
             </div>
           )
@@ -231,113 +231,194 @@ export default function AdminUsers() {
       {/* Users Table */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {filteredUsers.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Usuário
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Contato
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Nível
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Pontos
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Gamificação
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Cadastro
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ações
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <span className="text-primary font-semibold text-sm">
-                            {user.name.charAt(0).toUpperCase()}
-                          </span>
+          <>
+            {/* Desktop Table */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Usuário
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Contato
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Nível
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Pontos
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Gamificação
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Cadastro
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Ações
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredUsers.map((user) => (
+                    <tr key={user.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                            <span className="text-primary font-semibold text-sm">
+                              {user.name.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                          </div>
                         </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900 flex items-center gap-1">
+                          <Mail size={14} className="text-gray-400" />
+                          {user.email}
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900 flex items-center gap-1">
-                        <Mail size={14} className="text-gray-400" />
-                        {user.email}
-                      </div>
-                      {user.phone && (
-                        <div className="text-sm text-gray-500 flex items-center gap-1 mt-1">
-                          <Phone size={14} className="text-gray-400" />
-                          {user.phone}
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${getLevelColor(user.level)}`}>
-                        <span>{getLevelIcon(user.level)}</span>
-                        {user.level}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center gap-2">
-                        <Star className="text-yellow-400" size={16} />
-                        <span className="text-sm font-semibold text-gray-900">
-                          {user.points.toLocaleString()}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-xs text-gray-600">
-                          <Award size={12} className="text-purple-500" />
-                          <span>{user.achievements?.length || 0} conquistas</span>
-                        </div>
-                        {user.currentStreak && user.currentStreak > 0 && (
-                          <div className="flex items-center gap-2 text-xs text-gray-600">
-                            <TrendingUp size={12} className="text-orange-500" />
-                            <span>{user.currentStreak} dias streak</span>
+                        {user.phone && (
+                          <div className="text-sm text-gray-500 flex items-center gap-1 mt-1">
+                            <Phone size={14} className="text-gray-400" />
+                            {user.phone}
                           </div>
                         )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <Calendar size={14} className="text-gray-400" />
-                        {new Date(user.createdAt).toLocaleDateString('pt-BR')}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex items-center gap-2">
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${getLevelColor(user.level)}`}>
+                          <span>{getLevelIcon(user.level)}</span>
+                          {user.level}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center gap-2">
+                          <Star className="text-yellow-400" size={16} />
+                          <span className="text-sm font-semibold text-gray-900">
+                            {user.points.toLocaleString()}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2 text-xs text-gray-600">
+                            <Award size={12} className="text-purple-500" />
+                            <span>{user.achievements?.length || 0} conquistas</span>
+                          </div>
+                          {user.currentStreak && user.currentStreak > 0 && (
+                            <div className="flex items-center gap-2 text-xs text-gray-600">
+                              <TrendingUp size={12} className="text-orange-500" />
+                              <span>{user.currentStreak} dias streak</span>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Calendar size={14} className="text-gray-400" />
+                          {new Date(user.createdAt).toLocaleDateString('pt-BR')}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setShowAddPoints(user.id)}
+                            className="text-green-600 hover:text-green-800 p-2 hover:bg-green-50 rounded-lg transition-colors touch-target"
+                            title="Ajustar pontos"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="lg:hidden divide-y divide-gray-200">
+              {filteredUsers.map((user) => (
+                <div key={user.id} className="p-4 hover:bg-gray-50">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-primary font-semibold">
+                        {user.name.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      {/* Name and Level */}
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-sm font-medium text-gray-900 truncate">
+                            {user.name}
+                          </h3>
+                          <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border mt-1 ${getLevelColor(user.level)}`}>
+                            <span>{getLevelIcon(user.level)}</span>
+                            {user.level}
+                          </span>
+                        </div>
+                        
                         <button
                           onClick={() => setShowAddPoints(user.id)}
-                          className="text-green-600 hover:text-green-800 p-1 hover:bg-green-50 rounded transition-colors"
+                          className="text-green-600 hover:text-green-800 p-2 hover:bg-green-50 rounded-lg transition-colors touch-target ml-2"
                           title="Ajustar pontos"
                         >
                           <Edit2 size={16} />
                         </button>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+
+                      {/* Points */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <Star className="text-yellow-400" size={16} />
+                        <span className="text-sm font-semibold text-gray-900">
+                          {user.points.toLocaleString()} pontos
+                        </span>
+                      </div>
+
+                      {/* Contact Info */}
+                      <div className="space-y-1 mb-2">
+                        <div className="text-xs text-gray-600 flex items-center gap-1">
+                          <Mail size={12} className="text-gray-400" />
+                          <span className="truncate">{user.email}</span>
+                        </div>
+                        {user.phone && (
+                          <div className="text-xs text-gray-600 flex items-center gap-1">
+                            <Phone size={12} className="text-gray-400" />
+                            {user.phone}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Gamification Stats */}
+                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Award size={12} className="text-purple-500" />
+                          <span>{user.achievements?.length || 0} conquistas</span>
+                        </div>
+                        {user.currentStreak && user.currentStreak > 0 && (
+                          <div className="flex items-center gap-1">
+                            <TrendingUp size={12} className="text-orange-500" />
+                            <span>{user.currentStreak} dias streak</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-1">
+                          <Calendar size={12} className="text-gray-400" />
+                          <span>{new Date(user.createdAt).toLocaleDateString('pt-BR')}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
           <div className="text-center py-12">
-            <Users size={48} className="text-gray-300 mb-4" />
+            <Users size={48} className="text-gray-300 mb-4 mx-auto" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">Nenhum usuário encontrado</h3>
             <p className="text-gray-500">
               {searchTerm || levelFilter !== 'all' 
@@ -351,38 +432,40 @@ export default function AdminUsers() {
 
       {/* Add Points Modal */}
       {showAddPoints && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Ajustar Pontos</h3>
-            
-            <div className="mb-4">
-              <label htmlFor="points" className="block text-sm font-medium text-gray-700 mb-2">
-                Quantidade de pontos (use números negativos para remover)
-              </label>
-              <input
-                type="number"
-                id="points"
-                value={pointsAmount}
-                onChange={(e) => setPointsAmount(e.target.value)}
-                placeholder="Ex: 100 ou -50"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary"
-              />
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+          <div className="bg-white w-full sm:w-auto sm:min-w-96 sm:max-w-md sm:rounded-lg shadow-xl">
+            <div className="p-4 sm:p-6 border-b sm:border-b-0">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Ajustar Pontos</h3>
+              
+              <div className="mb-6">
+                <label htmlFor="points" className="block text-sm font-medium text-gray-700 mb-2">
+                  Quantidade de pontos (use números negativos para remover)
+                </label>
+                <input
+                  type="number"
+                  id="points"
+                  value={pointsAmount}
+                  onChange={(e) => setPointsAmount(e.target.value)}
+                  placeholder="Ex: 100 ou -50"
+                  className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary text-base sm:text-sm"
+                />
+              </div>
             </div>
 
-            <div className="flex justify-end gap-3">
+            <div className="p-4 sm:p-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
               <button
                 onClick={() => {
                   setShowAddPoints(null)
                   setPointsAmount('')
                 }}
-                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                className="px-4 py-3 sm:py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors touch-target"
               >
                 Cancelar
               </button>
               <button
                 onClick={() => handleAddPoints(showAddPoints, parseInt(pointsAmount) || 0)}
                 disabled={!pointsAmount}
-                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-3 sm:py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed touch-target"
               >
                 Confirmar
               </button>

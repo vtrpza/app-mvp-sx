@@ -57,7 +57,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
       return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-          <div className="max-w-md w-full">
+          <div className="w-full">
             <div className="bg-white rounded-lg shadow-lg p-8 text-center">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <AlertTriangle className="text-red-600" size={32} />
@@ -137,7 +137,7 @@ export function AdminErrorBoundary({ children }: { children: ReactNode }) {
     <ErrorBoundary
       fallback={
         <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-sm border p-6 text-center max-w-md">
+          <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
             <AlertTriangle className="text-orange-500 mb-4" size={48} />
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               Erro no Painel Admin
@@ -165,7 +165,7 @@ export function DashboardErrorBoundary({ children }: { children: ReactNode }) {
     <ErrorBoundary
       fallback={
         <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-sm border p-6 text-center max-w-md">
+          <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
             <AlertTriangle className="text-blue-500 mb-4" size={48} />
             <h2 className="text-xl font-semibold text-gray-900 mb-2">
               Erro no Dashboard

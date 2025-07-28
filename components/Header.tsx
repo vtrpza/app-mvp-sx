@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, X, User, MapPin, Bell, Star } from 'lucide-react'
+import { Menu, X, User, MapPin, Bell, Star, Users } from 'lucide-react'
 
 interface HeaderProps {
   user?: {
@@ -116,11 +116,15 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
             {isLoggedIn ? (
               <div className="flex items-center space-x-4">
                 {/* Points Display */}
-                <div className={`flex items-center gap-2 px-3 py-2 rounded-full border hover-lift interactive-card ${
-                  hasScrolled 
-                    ? 'bg-primary/10 border-primary/20' 
-                    : 'bg-white/10 backdrop-blur-sm border-white/20'
-                }`}>
+                <Link 
+                  href="/referrals"
+                  className={`flex items-center gap-2 px-3 py-2 rounded-full border hover-lift interactive-card transition-all duration-300 hover:scale-105 ${
+                    hasScrolled 
+                      ? 'bg-primary/10 border-primary/20 hover:bg-primary/20' 
+                      : 'bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20'
+                  }`}
+                  aria-label="Ver pontos e programa de indicações"
+                >
                   <Star className="text-yellow-400 fill-current animate-heartbeat" size={16} />
                   <span className={`text-sm font-semibold ${textClasses}`}>
                     {user?.points || 0}
@@ -138,7 +142,16 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
                   }`}>
                     {user?.level || 'Bronze'}
                   </span>
-                </div>
+                </Link>
+
+                {/* Referrals Link */}
+                <Link 
+                  href="/referrals"
+                  className={`p-2 rounded-lg focus-ring hover-lift transition-all duration-300 hover:scale-110`}
+                  aria-label="Programa de indicações"
+                >
+                  <Users size={20} className={`hover:animate-bounce ${iconClasses}`} />
+                </Link>
 
                 {/* Notifications */}
                 <button 
@@ -225,7 +238,7 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
                 <a 
                   key={item.href}
                   href={item.href} 
-                  className="block text-neutral-800 font-semibold py-4 px-6 rounded-2xl transition-all duration-300 hover:bg-primary/10 hover:text-primary focus-ring hover-lift animate-slide-up text-lg"
+                  className="block text-neutral-800 font-semibold py-4 px-6 rounded-2xl transition-all duration-300 hover:bg-primary/10 hover:text-primary focus-ring hover-lift animate-slide-up text-lg touch-target"
                   onClick={toggleMenu}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
@@ -257,9 +270,18 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
                     </div>
                   </div>
                   
+                  <Link 
+                    href="/referrals"
+                    className="w-full bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 py-4 px-6 rounded-2xl font-semibold text-lg hover-lift focus-ring flex items-center justify-center gap-3 touch-target"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Users size={20} />
+                    Programa de Indicações
+                  </Link>
+                  
                   <button 
                     onClick={handleLogout}
-                    className="w-full bg-neutral-100 text-neutral-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 py-4 px-6 rounded-2xl font-semibold text-lg hover-lift focus-ring"
+                    className="w-full bg-neutral-100 text-neutral-700 hover:bg-red-50 hover:text-red-600 transition-all duration-300 py-4 px-6 rounded-2xl font-semibold text-lg hover-lift focus-ring touch-target"
                   >
                     Sair da Conta
                   </button>
@@ -268,14 +290,14 @@ export default function Header({ user, onLogin, onLogout }: HeaderProps) {
                 <div className="space-y-4">
                   <Link 
                     href="/auth"
-                    className="w-full text-primary font-semibold py-4 px-6 rounded-2xl hover:bg-primary/10 transition-all duration-300 text-lg hover-lift focus-ring border-2 border-primary/20 block text-center"
+                    className="w-full text-primary font-semibold py-4 px-6 rounded-2xl hover:bg-primary/10 transition-all duration-300 text-lg hover-lift focus-ring border-2 border-primary/20 block text-center touch-target"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Entrar na Conta
                   </Link>
                   <Link 
                     href="/auth"
-                    className="w-full btn-primary btn-ripple hover-glow justify-center text-lg py-4 block text-center"
+                    className="w-full btn-primary btn-ripple hover-glow justify-center text-lg py-4 block text-center touch-target"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Criar Conta

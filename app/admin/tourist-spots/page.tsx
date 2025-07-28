@@ -11,6 +11,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react'
+import Image from 'next/image'
 import { mockDatabase } from '@/lib/supabase'
 import ImageUploader from '@/components/ImageUploader'
 
@@ -194,15 +195,15 @@ export default function TouristSpotsAdmin() {
 
       {/* Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b">
-              <h2 className="text-xl font-bold text-gray-900">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="bg-white w-full sm:rounded-xl sm:max-w-2xl sm:w-full max-h-[100vh] sm:max-h-[90vh] overflow-y-auto">
+            <div className="p-4 sm:p-6 border-b safe-top">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">
                 {editingSpot ? 'Editar Ponto Turístico' : 'Novo Ponto Turístico'}
               </h2>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6 safe-bottom">
               {/* Nome */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -212,7 +213,7 @@ export default function TouristSpotsAdmin() {
                   type="text"
                   value={formData.nome}
                   onChange={(e) => setFormData(prev => ({ ...prev, nome: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                   required
                 />
               </div>
@@ -226,7 +227,7 @@ export default function TouristSpotsAdmin() {
                   value={formData.descricao}
                   onChange={(e) => setFormData(prev => ({ ...prev, descricao: e.target.value }))}
                   rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                   required
                 />
               </div>
@@ -239,7 +240,7 @@ export default function TouristSpotsAdmin() {
                 <select
                   value={formData.categoria}
                   onChange={(e) => setFormData(prev => ({ ...prev, categoria: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                   required
                 >
                   {categories.map(cat => (
@@ -249,7 +250,7 @@ export default function TouristSpotsAdmin() {
               </div>
 
               {/* Coordenadas */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Latitude *
@@ -262,7 +263,7 @@ export default function TouristSpotsAdmin() {
                       ...prev, 
                       coordenadas: { ...prev.coordenadas, lat: parseFloat(e.target.value) || 0 }
                     }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                     required
                   />
                 </div>
@@ -278,7 +279,7 @@ export default function TouristSpotsAdmin() {
                       ...prev, 
                       coordenadas: { ...prev.coordenadas, lng: parseFloat(e.target.value) || 0 }
                     }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                     required
                   />
                 </div>
@@ -299,13 +300,13 @@ export default function TouristSpotsAdmin() {
                   type="text"
                   value={formData.horarioFuncionamento}
                   onChange={(e) => setFormData(prev => ({ ...prev, horarioFuncionamento: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                   placeholder="09:00 - 18:00"
                 />
               </div>
 
               {/* Taxa de Entrada */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Taxa de Entrada (R$)
@@ -316,7 +317,7 @@ export default function TouristSpotsAdmin() {
                     step="0.01"
                     value={formData.taxaEntrada}
                     onChange={(e) => setFormData(prev => ({ ...prev, taxaEntrada: parseFloat(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                   />
                 </div>
                 <div>
@@ -328,7 +329,7 @@ export default function TouristSpotsAdmin() {
                     min="0"
                     value={formData.pontosCheckin}
                     onChange={(e) => setFormData(prev => ({ ...prev, pontosCheckin: parseInt(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                   />
                 </div>
               </div>
@@ -342,7 +343,7 @@ export default function TouristSpotsAdmin() {
                   type="url"
                   value={formData.website}
                   onChange={(e) => setFormData(prev => ({ ...prev, website: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-base sm:text-sm"
                   placeholder="https://..."
                 />
               </div>
@@ -361,17 +362,17 @@ export default function TouristSpotsAdmin() {
               </div>
 
               {/* Actions */}
-              <div className="flex gap-3 pt-4 border-t">
+              <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 sm:py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors touch-target"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors"
+                  className="flex-1 px-4 py-3 sm:py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors touch-target"
                 >
                   {editingSpot ? 'Atualizar' : 'Criar'}
                 </button>
@@ -382,97 +383,188 @@ export default function TouristSpotsAdmin() {
       )}
 
       {/* Spots List */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {filteredSpots.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="text-left p-4 font-medium text-gray-900">Ponto Turístico</th>
-                  <th className="text-left p-4 font-medium text-gray-900">Categoria</th>
-                  <th className="text-left p-4 font-medium text-gray-900">Taxa</th>
-                  <th className="text-left p-4 font-medium text-gray-900">Pontos</th>
-                  <th className="text-left p-4 font-medium text-gray-900">Status</th>
-                  <th className="text-left p-4 font-medium text-gray-900">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredSpots.map((spot) => (
-                  <tr key={spot.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
-                        {spot.imagem ? (
-                          <img
-                            src={spot.imagem}
-                            alt={spot.nome}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
-                            <MapPin className="text-gray-400" size={20} />
+          <>
+            {/* Desktop Table */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="text-left p-4 font-medium text-gray-900">Ponto Turístico</th>
+                    <th className="text-left p-4 font-medium text-gray-900">Categoria</th>
+                    <th className="text-left p-4 font-medium text-gray-900">Taxa</th>
+                    <th className="text-left p-4 font-medium text-gray-900">Pontos</th>
+                    <th className="text-left p-4 font-medium text-gray-900">Status</th>
+                    <th className="text-left p-4 font-medium text-gray-900">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredSpots.map((spot) => (
+                    <tr key={spot.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          {spot.imagem ? (
+                            <div className="w-12 h-12 relative overflow-hidden rounded-lg">
+                              <Image
+                                src={spot.imagem}
+                                alt={spot.nome}
+                                width={48}
+                                height={48}
+                                className="object-cover"
+                                unoptimized={spot.imagem.startsWith('data:')}
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                              <MapPin className="text-gray-400" size={20} />
+                            </div>
+                          )}
+                          <div>
+                            <p className="font-medium text-gray-900">{spot.nome}</p>
+                            <p className="text-sm text-gray-500">{spot.descricao.substring(0, 50)}...</p>
                           </div>
-                        )}
-                        <div>
-                          <p className="font-medium text-gray-900">{spot.nome}</p>
-                          <p className="text-sm text-gray-500">{spot.descricao.substring(0, 50)}...</p>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className="capitalize text-gray-700">{spot.categoria}</span>
+                      </td>
+                      <td className="p-4">
+                        <span className="text-gray-700">
+                          {spot.taxaEntrada > 0 ? `R$ ${spot.taxaEntrada.toFixed(2)}` : 'Gratuito'}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-1">
+                          <Star className="text-yellow-500" size={16} />
+                          <span className="text-gray-700">{spot.pontosCheckin}</span>
+                        </div>
+                      </td>
+                      <td className="p-4">
+                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                          spot.ativo
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}>
+                          {spot.ativo ? <Eye size={12} /> : <EyeOff size={12} />}
+                          {spot.ativo ? 'Ativo' : 'Inativo'}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleEdit(spot)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors touch-target"
+                            title="Editar"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(spot.id)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors touch-target"
+                            title="Excluir"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="lg:hidden divide-y divide-gray-200">
+              {filteredSpots.map((spot) => (
+                <div key={spot.id} className="p-4 hover:bg-gray-50">
+                  <div className="flex items-start gap-4">
+                    {spot.imagem ? (
+                      <div className="w-16 h-16 relative overflow-hidden rounded-lg flex-shrink-0">
+                        <Image
+                          src={spot.imagem}
+                          alt={spot.nome}
+                          width={64}
+                          height={64}
+                          className="object-cover"
+                          unoptimized={spot.imagem.startsWith('data:')}
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <MapPin className="text-gray-400" size={24} />
+                      </div>
+                    )}
+                    
+                    <div className="flex-1 min-w-0">
+                      {/* Name and Actions */}
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-sm font-medium text-gray-900 truncate">
+                            {spot.nome}
+                          </h3>
+                          <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                            {spot.descricao}
+                          </p>
+                        </div>
+                        
+                        <div className="flex items-center gap-1 ml-2">
+                          <button
+                            onClick={() => handleEdit(spot)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors touch-target"
+                            title="Editar"
+                          >
+                            <Edit2 size={16} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(spot.id)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors touch-target"
+                            title="Excluir"
+                          >
+                            <Trash2 size={16} />
+                          </button>
                         </div>
                       </div>
-                    </td>
-                    <td className="p-4">
-                      <span className="capitalize text-gray-700">{spot.categoria}</span>
-                    </td>
-                    <td className="p-4">
-                      <span className="text-gray-700">
-                        {spot.taxaEntrada > 0 ? `R$ ${spot.taxaEntrada.toFixed(2)}` : 'Gratuito'}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-1">
-                        <Star className="text-yellow-500" size={16} />
-                        <span className="text-gray-700">{spot.pontosCheckin}</span>
+
+                      {/* Details */}
+                      <div className="flex flex-wrap items-center gap-4 text-xs">
+                        <div className="flex items-center gap-1">
+                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                          <span className="capitalize text-gray-600">{spot.categoria}</span>
+                        </div>
+                        
+                        <div className="flex items-center gap-1">
+                          <Star className="text-yellow-500" size={12} />
+                          <span className="text-gray-600">{spot.pontosCheckin} pontos</span>
+                        </div>
+                        
+                        <div className="text-gray-600">
+                          {spot.taxaEntrada > 0 ? `R$ ${spot.taxaEntrada.toFixed(2)}` : 'Gratuito'}
+                        </div>
+                        
+                        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                          spot.ativo
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}>
+                          {spot.ativo ? <Eye size={10} /> : <EyeOff size={10} />}
+                          {spot.ativo ? 'Ativo' : 'Inativo'}
+                        </span>
                       </div>
-                    </td>
-                    <td className="p-4">
-                      <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                        spot.ativo
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-red-100 text-red-700'
-                      }`}>
-                        {spot.ativo ? <Eye size={12} /> : <EyeOff size={12} />}
-                        {spot.ativo ? 'Ativo' : 'Inativo'}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => handleEdit(spot)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="Editar"
-                        >
-                          <Edit2 size={16} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(spot.id)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Excluir"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         ) : (
           <div className="text-center py-12">
-            <MapPin className="text-gray-300 mb-4" size={48} />
+            <MapPin className="text-gray-300 mb-4 mx-auto" size={48} />
             <p className="text-gray-500">Nenhum ponto turístico encontrado</p>
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="text-primary hover:underline mt-2"
+                className="text-primary hover:underline mt-2 touch-target p-2"
               >
                 Limpar busca
               </button>

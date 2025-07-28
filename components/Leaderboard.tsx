@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback, memo } from 'react'
 import { 
   Trophy, 
   Medal, 
@@ -17,6 +17,7 @@ import {
   Filter
 } from 'lucide-react'
 import { mockDatabase } from '@/lib/supabase'
+import { PerformantStorage, PerfMonitor, useMemoizedCalculation } from '@/lib/performance-utils'
 
 interface LeaderboardUser {
   rank: number

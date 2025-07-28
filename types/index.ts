@@ -7,6 +7,8 @@ export interface User {
   avatar?: string
   points: number
   level: 'Bronze' | 'Silver' | 'Gold' | 'Platinum'
+  referralCode?: string
+  referredBy?: string
   createdAt: string
   updatedAt: string
 }
@@ -14,7 +16,8 @@ export interface User {
 // Vehicle types
 export interface Vehicle {
   id: string | number
-  type: 'scooter' | 'bike' | 'jetski' | 'boat' | 'other'
+  category: 'bikes' | 'scooter' | 'jetski' | 'boats' | 'others'
+  type?: string // Deprecated, use category instead
   model?: string
   name: string
   description: string
@@ -30,7 +33,6 @@ export interface Vehicle {
   requirements: string[]
   image?: string
   rating: number
-  category: string
 }
 
 // Rental types
@@ -260,4 +262,32 @@ export interface Theme {
   mode: 'light' | 'dark'
   primaryColor: string
   accentColor: string
+}
+
+// Referral types
+export interface Referral {
+  id: string
+  referrerId: string
+  referredId: string
+  status: 'pending' | 'completed' | 'rewarded'
+  pointsAwarded: number
+  createdAt: string
+  completedAt?: string
+}
+
+export interface ReferralStats {
+  totalReferred: number
+  successfulReferrals: number
+  totalPointsEarned: number
+  pendingReferrals: number
+  rank?: number
+}
+
+export interface ReferralLeaderboard {
+  rank: number
+  userId: string
+  name: string
+  avatar?: string
+  referralCount: number
+  pointsEarned: number
 }

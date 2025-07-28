@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { MapPin, Star, Trophy, X, CheckCircle, Loader2 } from 'lucide-react'
+import Image from 'next/image'
 import { mockDatabase } from '@/lib/supabase'
 import { useAuth } from '@/components/AuthGuard'
 
@@ -19,13 +20,7 @@ export default function CheckInModal({ isOpen, onClose, touristSpot, onSuccess }
   const [error, setError] = useState('')
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false)
 
-  useEffect(() => {
-    if (isOpen && touristSpot && user) {
-      checkExistingCheckin()
-    }
-  }, [isOpen, touristSpot, user])
-
-  const checkExistingCheckin = () => {
+  const checkExistingCheckin = useCallback(() => {
     if (!user || !touristSpot) return
 
     // Check if user already checked in today at this location
@@ -38,7 +33,13 @@ export default function CheckInModal({ isOpen, onClose, touristSpot, onSuccess }
     )
 
     setHasCheckedInToday(!!todayCheckin)
-  }
+  }, [user, touristSpot])
+
+  useEffect(() => {
+    if (isOpen && touristSpot && user) {
+      checkExistingCheckin()
+    }
+  }, [isOpen, touristSpot, user, checkExistingCheckin])
 
   const handleCheckIn = async () => {
     if (!user || !touristSpot || hasCheckedInToday) return
@@ -86,14 +87,14 @@ export default function CheckInModal({ isOpen, onClose, touristSpot, onSuccess }
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl p-6 w-full">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+      <div className="bg-white w-full sm:w-auto sm:max-w-md sm:rounded-2xl p-4 sm:p-6 safe-bottom">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Check-in</h2>
+        <div className="flex items-center justify-between mb-4 sm:mb-6 safe-top">
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Check-in</h2>
           <button
             onClick={handleClose}
-            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 sm:p-1 hover:bg-gray-100 rounded-full transition-colors touch-target"
           >
             <X size={20} className="text-gray-500" />
           </button>
@@ -151,7 +152,7 @@ export default function CheckInModal({ isOpen, onClose, touristSpot, onSuccess }
 
             <button
               onClick={handleClose}
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors touch-target"
             >
               Continuar
             </button>
@@ -165,11 +166,16 @@ export default function CheckInModal({ isOpen, onClose, touristSpot, onSuccess }
             {touristSpot && (
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-6">
                 {touristSpot.image && (
-                  <img 
-                    src={touristSpot.image} 
-                    alt={touristSpot.name}
-                    className="w-16 h-16 rounded-lg object-cover"
-                  />
+                  <div className="w-16 h-16 relative overflow-hidden rounded-lg">
+                    <Image 
+                      src={touristSpot.image} 
+                      alt={touristSpot.name}
+                      width={64}
+                      height={64}
+                      className="object-cover"
+                      unoptimized={touristSpot.image.startsWith('data:')}
+                    />
+                  </div>
                 )}
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900">{touristSpot.name}</h3>
@@ -219,17 +225,17 @@ export default function CheckInModal({ isOpen, onClose, touristSpot, onSuccess }
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleClose}
-                className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                className="flex-1 bg-gray-200 text-gray-700 py-3 px-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors touch-target"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleCheckIn}
                 disabled={loading || hasCheckedInToday}
-                className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 touch-target"
               >
                 {loading ? (
                   <>
